@@ -1,0 +1,121 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "#0a0e1a",
+        "background-secondary": "#111827",
+        "background-tertiary": "#1a2234",
+        "surface": "#141a2b",
+        "surface-hover": "#1c2540",
+        border: "#1f2a44",
+        "border-glow": "#2d3a5c",
+        primary: {
+          50: "#f5f3ff",
+          100: "#ede9fe",
+          200: "#ddd6fe",
+          300: "#c4b5fd",
+          400: "#a78bfa",
+          500: "#8b5cf6",
+          600: "#7c3aed",
+          700: "#6d28d9",
+          800: "#5b21b6",
+          900: "#4c1d95",
+        },
+        accent: {
+          50: "#faf5ff",
+          100: "#f3e8ff",
+          200: "#e9d5ff",
+          300: "#d8b4fe",
+          400: "#c084fc",
+          500: "#a855f7",
+          600: "#9333ea",
+          700: "#7e22ce",
+          800: "#6b21a8",
+          900: "#4c1d95",
+        },
+        success: {
+          50: "#ecfdf5",
+          100: "#d1fae5",
+          200: "#a7f3d0",
+          300: "#6ee7b7",
+          400: "#34d399",
+          500: "#10b981",
+          600: "#059669",
+          700: "#047857",
+          800: "#065f46",
+          900: "#064e3b",
+        },
+        warning: {
+          50: "#fffbeb",
+          100: "#fef3c7",
+          200: "#fde68a",
+          300: "#fcd34d",
+          400: "#fbbf24",
+          500: "#f59e0b",
+          600: "#d97706",
+          700: "#b45309",
+          800: "#92400e",
+          900: "#78350f",
+        },
+        error: {
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#ef4444",
+          600: "#dc2626",
+          700: "#b91c1c",
+          800: "#991b1b",
+          900: "#7f1d1d",
+        },
+        "text-primary": "#ffffff",
+        "text-secondary": "#a1a8c4",
+        "text-muted": "#6b7280",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        card: "0 4px 24px -8px rgba(0, 0, 0, 0.5)",
+        "card-hover": "0 8px 32px -8px rgba(139, 92, 246, 0.25)",
+        glow: "0 0 20px -5px rgba(139, 92, 246, 0.4)",
+      },
+      backgroundImage: {
+        "gradient-primary": "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #d8b4fe 100%)",
+        "gradient-dark": "linear-gradient(135deg, #0a0e1a 0%, #111827 100%)",
+        "gradient-surface": "linear-gradient(135deg, #141a2b 0%, #1a2234 100%)",
+        "gradient-accent": "linear-gradient(135deg, #6d28d9 0%, #9333ea 50%, #c084fc 100%)",
+      },
+      keyframes: {
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.6" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 0.4s ease-out",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "scale-in": "scale-in 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
