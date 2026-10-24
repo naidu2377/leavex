@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09090F">
+<title>LEAVE X | Student Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;850&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#09090F;
+  --surface:#111118;
+  --card:#171722;
+  --card-green-start:#071D13;
+  --card-green-end:#002D17;
+  --border:#292933;
+  --text-primary:#F1F2F8;
+  --text-secondary:#9298AC;
+  --accent-green:#00E676;
+  --accent-purple:#7772FF;
+  --status-pending:#FF9800;
+  --status-rejected:#FF4057;
+  --status-approved:#00E676;
+  --radius-xl:28px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:12px;
+  --shadow-soft:0 20px 60px -40px rgba(0,230,118,0.4);
+  --glow-green:0 0 0 1px rgba(0,230,118,0.4),0 0 40px -20px rgba(0,230,118,0.6);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(circle at top,rgba(119,114,255,0.08),transparent 55%),var(--bg);color:var(--text-primary);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+.muted{color:var(--text-secondary)}
+.eyebrow{color:var(--text-secondary);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+
+/* Auth */
+.auth-shell{min-height:100dvh;display:grid;grid-template-columns:1.05fr 0.95fr;background:var(--bg);color:var(--text-primary)}
+.hero{position:relative;padding:clamp(32px,7vw,96px);background:radial-gradient(circle at 80% 85%,rgba(119,114,255,0.22),transparent 38%),radial-gradient(circle at 10% 10%,rgba(0,230,118,0.14),transparent 32%),linear-gradient(150deg,#0b0b16 0%,#09090F 65%);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;border-right:1px solid var(--border)}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(0,230,118,0.12),transparent 55%);pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:14px;font-size:22px;font-weight:850;letter-spacing:-.4px}
+.brand-logo{display:block;width:44px;height:44px;object-fit:contain;flex:none}
+.brand-copy{display:grid;gap:3px;line-height:1.05}
+.brand-copy strong{font-size:20px;font-weight:850;letter-spacing:-.5px}
+.brand-copy small{font-size:10px;font-weight:700;letter-spacing:1.6px;color:var(--text-secondary);text-transform:uppercase}
+.hero h1{font-size:clamp(42px,6vw,72px);line-height:1.02;letter-spacing:-2.6px;margin:22px 0 16px}
+.hero p{max-width:440px;color:var(--text-secondary);line-height:1.9;font-size:16px}
+.hero-foot{color:var(--text-secondary);font-size:12px;text-transform:uppercase;letter-spacing:3px}
+
+.auth-panel{display:grid;place-items:center;padding:clamp(20px,6vw,48px);background:radial-gradient(circle at top,rgba(119,114,255,0.1),transparent 60%),var(--bg)}
+.auth-card{width:min(100%,500px);display:grid;gap:18px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:clamp(26px,6vw,38px);box-shadow:0 60px 120px -80px rgba(119,114,255,0.5)}
+.auth-card-header{display:flex;align-items:center;gap:12px}
+.auth-card-header .brand{color:var(--text-primary)}
+.auth-card-header .brand-logo{width:40px;height:40px}
+.auth-card h2{margin:0;font-size:clamp(28px,4vw,38px);letter-spacing:-1.4px}
+.sub{margin:-10px 0 0;color:var(--text-secondary)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,0.01);border:1px solid var(--border);border-radius:999px;padding:6px;gap:6px}
+.tab{border:0;background:none;color:var(--text-secondary);padding:10px;border-radius:999px;font-weight:750;display:flex;align-items:center;justify-content:center;gap:8px}
+.tab.active{background:linear-gradient(135deg,rgba(119,114,255,0.9),rgba(139,123,255,0.8));color:var(--text-primary);box-shadow:0 20px 50px -30px rgba(119,114,255,0.9)}
+.demo-note{border:1px solid rgba(119,114,255,0.5);background:linear-gradient(135deg,rgba(119,114,255,0.18),transparent);border-radius:var(--radius-md);padding:12px 16px;font-size:13px;color:var(--text-primary)}
+
+.auth-form{display:grid;gap:16px}
+.field{display:grid;gap:8px}
+.field>span{font-size:12px;font-weight:750;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1.6px}
+.field input,.field select,.field textarea{width:100%;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface);color:var(--text-primary);transition:border .2s,box-shadow .2s}
+.field input::placeholder,.field textarea::placeholder{color:rgba(146,152,172,0.6)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(0,230,118,0.8);box-shadow:0 0 0 4px rgba(0,230,118,0.08)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.auth-error{color:var(--status-rejected);font-size:13px;font-weight:600;margin:-6px 0 0}
+.primary{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:12px 22px;font-weight:800;letter-spacing:.4px;background:linear-gradient(135deg,rgba(0,230,118,0.95),rgba(0,200,100,0.9));color:#03150b;box-shadow:var(--glow-green)}
+.primary.wide{width:100%}
+.secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:11px 18px;font-weight:700;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface);color:var(--text-primary)}
+.danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:11px 18px;font-weight:700;border:1px solid rgba(255,64,87,0.6);color:var(--status-rejected);background:transparent}
+.fineprint{margin:0;text-align:center;color:var(--text-secondary);font-size:12px}
+
+/* Portal */
+.portal{min-height:100dvh;background:radial-gradient(circle at top,rgba(119,114,255,0.12),transparent 55%),var(--bg)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:clamp(18px,5vw,34px) clamp(16px,8vw,90px) 10px}
+.topbar .brand{color:var(--text-primary)}
+.topbar .brand-logo{width:42px;height:42px}
+.topbar-group{display:flex;align-items:center;gap:14px}
+.topbar-text .eyebrow{margin:0}
+.topbar-text h1{margin:4px 0 0;font-size:clamp(24px,4vw,40px);letter-spacing:-1.4px}
+.user-chip{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:999px;padding:8px 16px 8px 10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
+.avatar{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(119,114,255,0.9),rgba(90,80,255,0.8));display:grid;place-items:center;font-weight:800;box-shadow:0 0 0 1px rgba(119,114,255,0.5)}
+.user-chip small{display:block;color:var(--text-secondary);font-size:12px}
+
+.main{display:grid;gap:20px;padding:6px clamp(16px,8vw,90px) calc(110px + env(safe-area-inset-bottom,0));max-width:1180px;margin:0 auto}
+
+.welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:clamp(22px,5vw,36px);border-radius:var(--radius-xl);border:1px solid var(--border);background:radial-gradient(circle at top right,rgba(119,114,255,0.24),transparent 55%),radial-gradient(circle at bottom left,rgba(0,230,118,0.16),transparent 60%),linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--card);box-shadow:0 80px 140px -100px rgba(119,114,255,0.7)}
+.welcome h2{margin:8px 0 10px;font-size:clamp(24px,4vw,38px);letter-spacing:-1.6px}
+.welcome p{margin:0;color:var(--text-secondary)}
+.date-pill{padding:9px 16px;border-radius:999px;border:1px solid var(--border);color:var(--text-secondary);font-size:13px;text-transform:uppercase;letter-spacing:1.8px}
+
+.status-card{position:relative;display:grid;grid-template-columns:1.2fr auto;gap:26px;padding:clamp(24px,6vw,40px);border-radius:var(--radius-xl);border:1px solid rgba(0,230,118,0.5);background:radial-gradient(circle at top right,rgba(0,230,118,0.22),transparent 58%),linear-gradient(140deg,var(--card-green-start),var(--card-green-end));box-shadow:var(--glow-green);overflow:hidden}
+.status-card::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(0,230,118,0.18),transparent 40%);pointer-events:none}
+.status-card>*{position:relative;z-index:1}
+.status-card.pending{border-color:rgba(255,152,0,0.6);background:radial-gradient(circle at top right,rgba(255,152,0,0.2),transparent 58%),linear-gradient(140deg,#1f1505,#2b1b07);box-shadow:0 0 0 1px rgba(255,152,0,0.4),0 0 40px -22px rgba(255,152,0,0.5)}
+.status-card.rejected{border-color:rgba(255,64,87,0.6);background:radial-gradient(circle at top right,rgba(255,64,87,0.2),transparent 58%),linear-gradient(140deg,#21070c,#2f0d14);box-shadow:0 0 0 1px rgba(255,64,87,0.4),0 0 40px -22px rgba(255,64,87,0.5)}
+.status-heading{display:flex;align-items:center;gap:10px;color:var(--text-secondary);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.status-symbol{width:10px;height:10px;border-radius:50%;background:var(--status-approved);box-shadow:0 0 0 10px rgba(0,230,118,0.14)}
+.pending .status-symbol{background:var(--status-pending);box-shadow:0 0 0 10px rgba(255,152,0,0.14)}
+.rejected .status-symbol{background:var(--status-rejected);box-shadow:0 0 0 10px rgba(255,64,87,0.14)}
+.status-title{margin:14px 0 12px;font-size:clamp(34px,8vw,62px);letter-spacing:-2.8px}
+.status-approved{color:var(--status-approved)}.status-pending{color:var(--status-pending)}.status-rejected{color:var(--status-rejected)}.status-empty{color:var(--text-secondary)}
+.status-badge{display:inline-flex;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.16);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.status-meta{display:flex;flex-wrap:wrap;gap:22px;margin-top:26px}
+.status-meta small{display:block;color:var(--text-secondary);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.status-meta strong{display:block;margin-top:6px;font-size:15px}
+.qr-placeholder{align-self:center;text-align:center;padding:20px;border-radius:var(--radius-lg);border:1px dashed rgba(0,230,118,0.5);color:var(--text-secondary);max-width:260px;background:linear-gradient(180deg,rgba(0,230,118,0.12),transparent)}
+
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.section-head h2{margin:0;font-size:clamp(18px,3vw,26px);letter-spacing:-1px}
+.text-button{border:0;background:none;color:var(--text-secondary);font-weight:700;display:inline-flex;align-items:center;gap:8px}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat{display:grid;gap:8px;padding:18px 22px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--card);box-shadow:0 60px 100px -80px rgba(119,114,255,0.4)}
+.stat-label{color:var(--text-secondary);font-size:13px}
+.stat-value{font-size:34px;letter-spacing:-1.6px}
+
+.panel{display:grid;gap:18px;padding:clamp(18px,5vw,30px);border-radius:var(--radius-xl);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--card)}
+.panel.empty-state{text-align:center;padding:46px 22px;color:var(--text-secondary)}
+.panel.empty-state b{display:block;color:var(--text-primary);margin-bottom:8px;font-size:18px}
+
+.application-list{display:grid;gap:14px}
+.application-row{display:flex;justify-content:space-between;gap:18px;padding:18px 22px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
+.application-row strong{display:block;font-size:16px}
+.application-row small{color:var(--text-secondary)}
+
+.row-actions{display:flex;align-items:center;gap:12px}
+.status-label{display:inline-flex;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
+.status-label.status-approved{background:rgba(0,230,118,0.18);color:var(--status-approved);box-shadow:0 0 0 1px rgba(0,230,118,0.4)}
+.status-label.status-pending{background:rgba(255,152,0,0.2);color:var(--status-pending);box-shadow:0 0 0 1px rgba(255,152,0,0.4)}
+.status-label.status-rejected{background:rgba(255,64,87,0.2);color:var(--status-rejected);box-shadow:0 0 0 1px rgba(255,64,87,0.4)}
+
+.bottom-nav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0));transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;gap:8px;width:min(720px,calc(100% - 16px));padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent),rgba(9,9,15,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 60px 100px -60px rgba(119,114,255,0.6);z-index:10}
+.bottom-nav button{display:grid;gap:6px;justify-items:center;border:0;background:none;color:var(--text-secondary);padding:6px 4px}
+.bottom-nav button.active{color:var(--accent-purple)}
+.bottom-nav .apply-nav{color:var(--text-primary)}
+.bottom-nav .apply-nav .nav-icon{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,rgba(119,114,255,0.95),rgba(90,80,255,0.9));margin-top:-28px;box-shadow:0 30px 60px -30px rgba(119,114,255,0.9),0 0 0 1px rgba(119,114,255,0.6)}
+.nav-icon{width:20px;height:20px;display:grid;place-items:center}
+.nav-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.apply-nav .nav-icon{font-size:30px;line-height:1}
+
+.notice{padding:12px 18px;border-radius:var(--radius-md);border:1px solid rgba(119,114,255,0.6);background:linear-gradient(135deg,rgba(119,114,255,0.2),transparent);color:var(--text-primary)}
+
+.form-grid,.profile-grid,.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.span-2{grid-column:1/-1}
+.panel .field>span{color:var(--text-secondary)}
+.panel .field input,.panel .field select,.panel .field textarea{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface);border-color:var(--border);color:var(--text-primary)}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.detail{display:grid;gap:8px;padding:16px 18px;border-radius:var(--radius-md);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
+.detail small{color:var(--text-secondary);text-transform:uppercase;letter-spacing:1.8px;font-size:11px}
+.letter{white-space:pre-wrap;padding:20px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface);line-height:1.9}
+.verification-mode .topbar,.verification-mode .bottom-nav{display:none}
+.verification-mode:not(.hidden){display:block}
+.verification-mode .sidebar{display:none}
+.verification-mode .main{max-width:540px;padding:18px 16px 30px}
+.verify-banner{display:grid;justify-items:center;gap:5px;padding:24px 18px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#00d968,#00b957);color:#04150b;text-align:center}
+.verify-banner .verify-shield{font-size:27px;line-height:1}
+.verify-banner strong{font-size:22px;letter-spacing:.5px}
+.verify-banner span{font-size:13px;font-weight:700}
+.verify-student{display:flex;align-items:center;gap:13px;padding:16px;border-bottom:1px solid var(--border)}
+.verify-student .avatar{flex:none}
+.verify-student strong,.verify-student small{display:block}
+.verify-student small{color:var(--text-secondary);font-size:12px}
+.verify-meta{display:flex;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.verify-meta span{display:grid;gap:3px}
+.verify-meta small{color:var(--text-secondary);font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.verify-meta strong{overflow-wrap:anywhere;font-size:12px}
+.verify-letter-label{padding:14px 16px 0;color:var(--text-secondary);font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
+.verify-letter{margin:10px 16px 16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:var(--text-primary);font-size:13px}
+.verify-contacts{display:flex;gap:10px;padding:0 16px 16px}
+.verify-contacts a{flex:1;text-align:center;padding:10px;border:1px solid var(--border);border-radius:12px;color:var(--text-primary);font-size:12px}
+.qr-result{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:18px;padding:18px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface)}
+.qr-result img{display:block;width:150px;height:150px;padding:7px;border-radius:13px;background:#fff;image-rendering:pixelated}
+.qr-result p{margin:5px 0 0;color:var(--text-secondary);font-size:12px}
+.qr-error{color:var(--status-rejected);font-size:12px}
+.demo-approval-note{font-size:11px;color:var(--text-secondary)}
+.portal:not(.hidden){display:grid;grid-template-columns:250px minmax(0,1fr);grid-template-rows:auto 1fr;align-items:start}
+.sidebar{grid-column:1;grid-row:1/3;position:sticky;top:0;height:100dvh;padding:22px 14px 16px;background:#101018;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:28px}
+.sidebar-brand{padding:0 8px 17px;border-bottom:1px solid var(--border)}
+.sidebar-brand .brand{gap:9px}
+.sidebar-brand .brand-logo{width:36px;height:36px}
+.sidebar-brand .brand-copy strong{font-size:17px}
+.sidebar-brand .brand-copy small{font-size:8px}
+.side-label{margin:0 8px 8px;color:#4f566d;font-size:9px;font-weight:850;letter-spacing:1.5px;text-transform:uppercase}
+.side-nav{display:grid;gap:5px}
+.side-nav button,.side-logout{width:100%;display:flex;align-items:center;gap:12px;padding:11px;border:0;border-radius:11px;background:transparent;color:var(--text-secondary);text-align:left;font-size:13px;font-weight:700}
+.side-nav button.active{background:#211f3e;color:var(--accent-purple)}
+.side-nav button:hover,.side-logout:hover{background:#191923}
+.side-nav .nav-icon,.side-logout .nav-icon{flex:none;width:18px;height:18px}
+.side-nav .nav-icon,.side-logout .nav-icon{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.side-logout-wrap{margin-top:auto;padding-top:14px;border-top:1px solid var(--border)}
+.side-logout{justify-content:center;background:rgba(255,64,87,.12);color:var(--status-rejected)}
+.side-logout:hover{background:rgba(255,64,87,.2)}
+.portal>.topbar{grid-column:2;grid-row:1;min-width:0;padding:12px 28px;border-bottom:1px solid var(--border)}
+.portal>.topbar .brand{display:none}
+.portal>.topbar .topbar-group{gap:0}
+.portal>.topbar .topbar-text .eyebrow{font-size:10px}
+.portal>.topbar .topbar-text h1{font-size:16px;letter-spacing:0;text-transform:uppercase}
+.portal>.main{grid-column:2;grid-row:2;width:100%;max-width:1180px;padding:28px clamp(20px,3vw,42px) 48px}
+.portal>.bottom-nav{display:none}
+.dash-intro{display:flex;align-items:center;gap:14px}
+.dash-intro .avatar{width:62px;height:62px;border-radius:15px;background:#15151e}
+.dash-intro h2{margin:0;font-size:clamp(22px,3vw,36px);letter-spacing:-1.3px}
+.dash-tags{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 0}
+.dash-tag{padding:4px 10px;border-radius:7px;background:#111118;border:1px solid #20202b;color:var(--text-secondary);font-size:10px;font-weight:750}
+.dashboard-grid{display:grid;grid-template-columns:minmax(240px,.72fr) minmax(300px,1fr);gap:16px}
+.apply-card{overflow:hidden;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface)}
+.apply-card-art{height:112px;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,rgba(119,114,255,.32),transparent 42%),linear-gradient(135deg,#111a34,#171722 65%,#101018);color:#a99fff}
+.apply-card-art svg{width:58px;height:58px;stroke:currentColor;fill:none;stroke-width:1.5}
+.apply-card-body{padding:16px}
+.apply-card-body h3{margin:0 0 5px;font-size:14px}
+.apply-card-body p{margin:0 0 14px;color:var(--text-secondary);font-size:11px}
+.apply-card-body .primary{width:100%;padding:9px 12px;font-size:11px}
+.recent-card{min-height:220px}
+.recent-list{display:grid;gap:9px}
+.recent-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text-primary);text-align:left}
+.recent-item strong,.recent-item small{display:block}
+.recent-item strong{font-size:11px}
+.recent-item small{color:var(--text-secondary);font-size:10px}
+.recent-item .status-label{font-size:9px;padding:5px 8px}
+.stat-expired .stat-value{color:var(--text-secondary)}
+.status-card.expired{border-color:#343844;background:linear-gradient(140deg,#111827,#151a26);box-shadow:none}
+.status-card.expired .status-symbol{background:#657086;box-shadow:0 0 0 10px rgba(101,112,134,.12)}
+.status-expired{color:#778198}
+.expired-label{background:rgba(119,129,152,.16);color:#9298AC}
+.stats{grid-template-columns:repeat(5,minmax(0,1fr))}
+.stat-total .stat-value{color:var(--text-primary)}
+.stat-approved .stat-value{color:var(--accent-green)}
+.stat-pending .stat-value{color:var(--status-pending)}
+.stat-rejected .stat-value{color:var(--status-rejected)}
+.apply-layout{display:grid;gap:17px}
+.apply-layout>.panel{max-width:880px;width:100%;margin:0 auto;padding:clamp(19px,4vw,34px)}
+.draft-header{text-align:center}
+.draft-header h2{margin:0 0 5px;font-size:21px}
+.draft-header p{margin:0;color:var(--text-secondary);font-size:12px}
+.draft-textarea{min-height:330px;resize:vertical;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.draft-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--text-secondary);font-size:11px}
+.draft-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+.help-list{display:grid;gap:14px}
+.help-item{display:grid;gap:8px;padding:18px 22px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
+.help-item p{margin:0;color:var(--text-secondary)}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0));transform:translateX(-50%);padding:10px 20px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent),rgba(9,9,15,0.9);backdrop-filter:blur(14px);color:var(--text-primary);z-index:20}
+
+@media(max-width:1080px){.auth-shell{grid-template-columns:1fr}.hero{display:none}}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid,.profile-grid,.details-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.status-card{grid-template-columns:1fr}.welcome{flex-direction:column}.application-row{flex-direction:column;align-items:flex-start}.row-actions{width:100%;justify-content:space-between}}
+@media(max-width:420px){.qr-result{grid-template-columns:104px minmax(0,1fr);gap:12px;padding:12px}.qr-result img{width:104px;height:104px}.qr-result p{overflow-wrap:anywhere}}
+@media(max-width:720px){.portal:not(.hidden){display:block}.sidebar{display:none}.portal>.topbar{display:flex;grid-column:auto;grid-row:auto;padding:18px 16px 10px;border:0}.portal>.topbar .brand{display:flex}.portal>.topbar .topbar-group{gap:10px}.portal>.topbar .topbar-text .eyebrow{display:none}.portal>.topbar .topbar-text h1{font-size:clamp(21px,5vw,28px);text-transform:none}.portal>.main{grid-column:auto;grid-row:auto;padding:7px 14px calc(132px + env(safe-area-inset-bottom,0));}.portal>.bottom-nav{display:grid}.dashboard-grid{grid-template-columns:1fr}.apply-card-art{height:100px}.dash-intro .avatar{width:50px;height:50px}.dash-intro h2{font-size:22px}.status-meta{gap:14px}.status-meta strong{font-size:12px}}
+@media(max-width:720px){.portal>.topbar .brand{gap:8px}.portal>.topbar .brand-copy{display:none}.portal>.topbar .topbar-text h1{font-size:16px;letter-spacing:-.4px;white-space:nowrap}.portal>.topbar .user-chip{gap:7px;padding:5px 9px 5px 6px}.portal>.topbar .user-chip small{display:none}.portal>.topbar .user-chip strong{display:block;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.dash-intro{position:relative;padding-right:0}.dash-intro .date-pill{position:absolute;right:0;top:0;margin:0!important;padding:5px 8px;font-size:9px;letter-spacing:.3px;white-space:nowrap}.dash-intro>div:nth-child(2){max-width:calc(100% - 68px)}}
+.portal.verification-mode:not(.hidden){display:block}
+.portal.verification-mode>.topbar,.portal.verification-mode>.bottom-nav,.portal.verification-mode>.sidebar{display:none}
+.portal.verification-mode>.main{grid-column:auto;grid-row:auto;max-width:540px;padding:18px 16px 30px}
+@media(min-width:721px) and (max-width:960px){.portal:not(.hidden){grid-template-columns:76px minmax(0,1fr)}.sidebar{padding:18px 10px}.sidebar-brand{padding:0 8px 17px}.sidebar-brand .brand-copy,.side-label,.side-nav button>span:not(.nav-icon),.side-logout>span:not(.nav-icon){display:none}.sidebar-brand .brand-logo{width:40px;height:40px}.side-nav button,.side-logout{justify-content:center;padding:12px 8px}.side-nav .nav-icon,.side-logout .nav-icon{width:20px;height:20px}.dashboard-grid{grid-template-columns:minmax(200px,.72fr) minmax(260px,1fr)}}
+</style>
+</head>
+<body>
+<section id="auth" class="auth-shell">
+  <div class="hero">
+    <div class="brand"><img class="brand-logo" src="leavex-logo.png" alt="LEAVE X logo"><span class="brand-copy"><strong>LeaveX</strong><small>Leave Portal</small></span></div>
+    <div>
+      <div class="eyebrow">College leave management</div>
+      <h1>Leave made<br>simple.</h1>
+      <p>Apply for leave, track approvals in real-time, and access verified leave records with premium clarity.</p>
+    </div>
+    <div class="hero-foot">LEAVE X • PREMIUM PORTAL</div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="brand"><img class="brand-logo" src="leavex-logo.png" alt="LEAVE X logo"><span class="brand-copy"><strong>LeaveX</strong><small>Leave Portal</small></span></div>
+      </div>
+      <div>
+        <h2 id="form-title">Welcome back</h2>
+        <p id="form-sub" class="sub">Sign in to your student portal.</p>
+      </div>
+      <div class="tabs">
+        <button id="login-tab" type="button" class="tab active">Sign in</button>
+        <button id="register-tab" type="button" class="tab">Create account</button>
+      </div>
+      <form id="auth-form" class="auth-form" novalidate>
+        <label id="name-wrap" class="field hidden"><span>Full Name *</span><input id="name" autocomplete="name" placeholder="Enter your full name"></label>
+        <div id="register-fields" class="hidden" style="display:grid;gap:16px">
+          <label class="field"><span>Roll Number *</span><input id="roll" placeholder="e.g. 23471A05BK"></label>
+          <label class="field"><span>Branch / Department *</span>
+            <select id="department">
+              <option value="">Select Department</option>
+              <option value="CSE - Computer Science and Engineering">CSE - Computer Science and Engineering</option>
+              <option value="CSE (AI & ML) - Artificial Intelligence and Machine Learning">CSE (AI & ML) - Artificial Intelligence and Machine Learning</option>
+              <option value="CSE (Data Science)">CSE (Data Science)</option>
+              <option value="IT - Information Technology">IT - Information Technology</option>
+              <option value="ECE - Electronics and Communication Engineering">ECE - Electronics and Communication Engineering</option>
+              <option value="EEE - Electrical and Electronics Engineering">EEE - Electrical and Electronics Engineering</option>
+              <option value="EIE - Electronics and Instrumentation Engineering">EIE - Electronics and Instrumentation Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="AI & DS - Artificial Intelligence and Data Science">AI & DS - Artificial Intelligence and Data Science</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <div class="form-grid">
+            <label class="field"><span>Year of Study *</span>
+              <select id="year">
+                <option value="">Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </label>
+            <label class="field"><span>Section *</span>
+              <select id="section">
+                <option value="">Select Section</option>
+                <option value="C1">C1</option>
+                <option value="C2">C2</option>
+                <option value="C3">C3</option>
+                <option value="C4">C4</option>
+                <option value="C5">C5</option>
+                <option value="C6">C6</option>
+                <option value="G1">G1</option>
+                <option value="G2">G2</option>
+              </select>
+            </label>
+          </div>
+          <label class="field"><span>Phone Number *</span><input id="phone" type="tel" autocomplete="tel" placeholder="Enter your phone number"></label>
+        </div>
+        <label class="field"><span>Email Address *</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label class="field"><span>Password *</span><input id="password" type="password" autocomplete="new-password" placeholder="At least 6 characters" required minlength="6"></label>
+        <label id="confirm-wrap" class="field hidden"><span>Confirm Password *</span><input id="confirm" type="password" placeholder="Re-enter your password"></label>
+        <div id="form-error" class="auth-error" role="alert"></div>
+        <button id="submit-btn" class="primary wide" type="submit">Sign in →</button>
+      </form>
+      <p class="fineprint">LEAVE X • Premium Dark Neon Theme</p>
+    </div>
+  </div>
+</section>
+
+<section id="portal" class="portal hidden">
+  <aside class="sidebar" aria-label="Portal menu">
+    <div class="sidebar-brand">
+      <div class="brand"><img class="brand-logo" src="leavex-logo.png" alt="LEAVE X logo"><span class="brand-copy"><strong>LEAVE X</strong><small>STUDENT PORTAL</small></span></div>
+    </div>
+    <div>
+      <p class="side-label">Menu</p>
+      <nav class="side-nav" aria-label="Student navigation">
+        <button data-page="home" class="active"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Dashboard</span></button>
+        <button data-page="apply"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Apply Leave</span></button>
+        <button data-page="history"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg><span>History</span></button>
+        <button data-page="profile"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span>Profile</span></button>
+        <button data-page="help"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.4 1.6c-1.1 1.2-2 1.2-2 3"/><path d="M12 17.5h.01"/></svg><span>Help</span></button>
+      </nav>
+    </div>
+    <div class="side-logout-wrap"><button class="side-logout" type="button" id="sidebar-logout"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg><span>Logout</span></button></div>
+  </aside>
+  <header class="topbar">
+    <div class="topbar-group">
+      <div class="brand"><img class="brand-logo" src="leavex-logo.png" alt="LEAVE X logo"><span class="brand-copy"><strong>LeaveX</strong><small>Leave Portal</small></span></div>
+      <div class="topbar-text">
+        <div class="eyebrow">Student Portal</div>
+        <h1 id="page-title">Home</h1>
+      </div>
+    </div>
+    <div class="user-chip">
+      <div id="avatar" class="avatar">S</div>
+      <div>
+        <strong id="user-name">Student</strong>
+        <small>Student Account</small>
+      </div>
+    </div>
+  </header>
+  <main id="view" class="main"></main>
+  <nav class="bottom-nav" aria-label="Student navigation">
+    <button data-page="home" class="active"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span>Home</span></button>
+    <button data-page="history"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg></span><span>History</span></button>
+    <button data-page="apply" class="apply-nav" aria-label="Apply for leave"><span class="nav-icon" aria-hidden="true">+</span><span class="hidden">Apply</span></button>
+    <button data-page="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></span><span>Profile</span></button>
+    <button data-page="help"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M9.6 9a2.5 2.5 0 1 1 4.4 1.6c-1.1 1.2-2 1.2-2 3"/><path d="M12 17.5h.01"/></svg></span><span>Help</span></button>
+  </nav>
+</section>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script src="qrcode-generator.js"></script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const storageKey=email=>'leavex:profile:'+email.toLowerCase();
+const applicationsKey=email=>'leavex:applications:'+email.toLowerCase();
+const verificationKey=id=>'leavex:verification:'+id;
+const rollKey=roll=>'leavex:roll:'+roll.toUpperCase();
+let mode='login',profile=null,applications=[],toastTimer=null,currentPage='home',selectedApplication=null;
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const formatDate=value=>{if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat(undefined,{dateStyle:'medium'}).format(date)};
+const formatDateTime=value=>{if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date)};
+function showToast(message){const toast=$('toast');toast.textContent=message;toast.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hidden'),3200)}
+function normalizeRoll(roll){return String(roll||'').toUpperCase().trim()}
+function setMode(next){mode=next;const registering=mode==='register';$('login-tab').classList.toggle('active',!registering);$('register-tab').classList.toggle('active',registering);$('form-title').textContent=registering?'Create your account':'Welcome back';$('form-sub').textContent=registering?'Set up your student profile.':'Sign in to your student portal.';$('name-wrap').classList.toggle('hidden',!registering);$('register-fields').classList.toggle('hidden',!registering);$('confirm-wrap').classList.toggle('hidden',!registering);$('submit-btn').textContent=registering?'Create account →':'Sign in →';$('password').autocomplete=registering?'new-password':'current-password';$('form-error').textContent=''}
+$('login-tab').addEventListener('click',()=>setMode('login'));
+$('register-tab').addEventListener('click',()=>setMode('register'));
+const rollInput=$('roll');
+if(rollInput){rollInput.addEventListener('input',()=>{const s=rollInput.selectionStart,e=rollInput.selectionEnd;rollInput.value=rollInput.value.toUpperCase().trimStart();rollInput.setSelectionRange(s,e);});}
+$('auth-form').addEventListener('submit',event=>{
+  event.preventDefault();$('form-error').textContent='';
+  const email=$('email').value.trim().toLowerCase(),password=$('password').value,name=$('name').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){$('form-error').textContent='Enter a valid email address.';return}
+  if(password.length<6){$('form-error').textContent='Use a password with at least 6 characters.';return}
+  if(mode==='register'){
+    if(!name){$('form-error').textContent='Enter your full name.';return}
+    const roll=normalizeRoll($('roll').value);
+    if(!roll){$('form-error').textContent='Enter your roll number.';return}
+    if(!$('department').value){$('form-error').textContent='Select your branch/department.';return}
+    if(!$('year').value){$('form-error').textContent='Select your year of study.';return}
+    if(!$('section').value){$('form-error').textContent='Select your section.';return}
+    if(!$('phone').value.trim()){$('form-error').textContent='Enter your phone number.';return}
+    if($('confirm').value!==password){$('form-error').textContent='The passwords do not match.';return}
+    if(localStorage.getItem(rollKey(roll))){$('form-error').textContent='Roll number already registered.';return}
+    if(localStorage.getItem(storageKey(email))){$('form-error').textContent='Email address already registered.';return}
+    profile={email,name,roll,department:$('department').value,year:$('year').value,section:$('section').value,phone:$('phone').value.trim(),role:'student',createdAt:new Date().toISOString()};
+    try{localStorage.setItem(storageKey(email),JSON.stringify(profile));localStorage.setItem(rollKey(roll),email);}catch(e){$('form-error').textContent='Could not save profile.';return}
+  }else{
+    let storedProfile;try{storedProfile=JSON.parse(localStorage.getItem(storageKey(email))||'null');}catch(e){$('form-error').textContent='Could not read profile.';return}
+    if(!storedProfile){$('form-error').textContent='Account not found. Please create an account.';return}
+    profile=storedProfile;
+  }
+  try{applications=JSON.parse(localStorage.getItem(applicationsKey(email))||'[]');if(!Array.isArray(applications))applications=[];}catch(e){applications=[]}
+  openPortal();
+});
+function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate('home');window.scrollTo(0,0)}
+function navigate(page){currentPage=page;if(page!=='details')selectedApplication=null;document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=({home:'Home',history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';renderPage();window.scrollTo(0,0)}
+function verificationUrl(app){const url=new URL(location.href);url.hash='verify/'+encodeURIComponent(app.id);return url.href}
+function createApplicationQr(app){
+  if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
+  const qr=qrcode(0,'M');qr.addData(verificationUrl(app));qr.make();return qr.createDataURL(6,4);
+}
+function renderQrImage(app,targetId){
+  const target=$(targetId);if(!target)return;
+  try{target.src=createApplicationQr(app);target.classList.remove('hidden');}
+  catch(error){target.classList.add('hidden');showToast(error.message||'Could not generate the application QR code.');}
+}
+function showVerification(app){
+  $('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');
+  const student=app.student||{},initial=(student.name||'S').trim().charAt(0).toUpperCase();
+  const contacts=[student.phone?`<a href="tel:${escapeHtml(student.phone)}">Student · ${escapeHtml(student.phone)}</a>`:'',app.parentPhone?`<a href="tel:${escapeHtml(app.parentPhone)}">Parent · ${escapeHtml(app.parentPhone)}</a>`:''].filter(Boolean).join('');
+  $('view').innerHTML=`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · DEMO</span></section><section class="panel" style="padding:0;gap:0"><div class="verify-student"><div class="avatar">${escapeHtml(initial)}</div><div><strong>${escapeHtml(student.name||'Student')}</strong><small>${escapeHtml(student.roll||'Roll number not provided')} · ${escapeHtml(student.department||'Department not provided')}</small><small>${escapeHtml([student.year?`Year ${student.year}`:'',student.section?`Section ${student.section}`:''].filter(Boolean).join(' · '))}</small></div></div><div class="verify-meta"><span><small>Submission date</small><strong>${escapeHtml(formatDate(app.submittedAt))}</strong></span><span><small>Time</small><strong>${escapeHtml(new Intl.DateTimeFormat(undefined,{timeStyle:'short'}).format(new Date(app.submittedAt)))}</strong></span></div><div class="verify-meta"><span><small>Leave type</small><strong>${escapeHtml(app.type||'Leave Application')}</strong></span><span><small>Requested dates</small><strong>${app.start&&app.end?`${escapeHtml(formatDate(app.start))} – ${escapeHtml(formatDate(app.end))}`:'See dates in submitted letter'}</strong></span></div><div class="verify-letter-label">Leave application · ${escapeHtml(app.id)}</div><div class="verify-letter">${escapeHtml(app.letter)}</div>${contacts?`<div class="verify-contacts">${contacts}</div>`:''}<p class="demo-approval-note" style="padding:0 16px 16px">Demo preview stored in this browser. This is not an official college verification.</p></section>`;
+  window.scrollTo(0,0);
+}
+function openVerificationFromHash(){
+  if(!location.hash.startsWith('#verify/'))return false;
+  let id='';try{id=decodeURIComponent(location.hash.slice('#verify/'.length))}catch(error){id=''}
+  let app=null;try{app=JSON.parse(localStorage.getItem(verificationKey(id))||'null')}catch(error){app=null}
+  if(app&&app.id===id&&app.status==='Approved')showVerification(app);
+  else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This demo application is not saved in this browser. Public cross-device verification requires a connected server.</section>'}
+  return true;
+}
+function latestApplication(){return[...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt))[0]||null}
+function statusClass(s){return s==='Approved'?'approved':s==='Rejected'?'rejected':s==='Pending'?'pending':''}
+function isApplicationExpired(app,today=new Date()){if(app.status==='Expired')return true;if(!app.end)return false;const end=new Date(app.end);return !Number.isNaN(end.getTime())&&end<today}
+function renderHome(){
+  const today=new Date(),current=latestApplication(),expired=current&&isApplicationExpired(current,today),status=expired?'Expired':current?.status||'No Active Leave';
+  const counts={total:applications.length,pending:applications.filter(a=>a.status==='Pending').length,approved:applications.filter(a=>a.status==='Approved'&&!isApplicationExpired(a,today)).length,rejected:applications.filter(a=>a.status==='Rejected').length,expired:applications.filter(a=>isApplicationExpired(a,today)).length};
+  const cardClass=expired?'expired':statusClass(status),statusText=status==='No Active Leave'?'NO APPLICATIONS':status.toUpperCase();
+  const recent=[...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt)).slice(0,3);
+  $('view').innerHTML=`<section class="dash-intro"><div class="avatar">${escapeHtml((profile.name||'S').trim().charAt(0).toUpperCase())}</div><div><h2>${escapeHtml(profile.name||'Student')}</h2><div class="dash-tags"><span class="dash-tag">ROLL NO: ${escapeHtml(profile.roll||'—')}</span><span class="dash-tag">${escapeHtml(profile.department||'Student')} · YEAR ${escapeHtml(profile.year||'—')} · ${escapeHtml(profile.section||'—')}</span></div></div><span class="date-pill" style="margin-left:auto">${escapeHtml(new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(today))}</span></section>
+  <section class="status-card ${cardClass}"><div><div class="status-heading"><span class="status-symbol"></span> LATEST APPLICATION STATUS</div><h2 class="status-title ${status==='Approved'?'status-approved':status==='Pending'?'status-pending':status==='Rejected'?'status-rejected':status==='Expired'?'status-expired':'status-empty'}">${escapeHtml(statusText)}</h2><span class="status-badge">${current?.status==='Approved'&&!expired?'APPROVED · DEMO':status==='Pending'?'AWAITING REVIEW':status==='Expired'?'LEAVE PERIOD ENDED':'APPLICATION STATUS'}</span><div class="status-meta">${current?`<span><small>APPLIED ON</small><strong>${escapeHtml(formatDate(current.submittedAt))}</strong></span><span><small>APPLICATION</small><strong>${escapeHtml(current.id)}</strong></span>${current.status==='Approved'?`<span><small>REVIEWED BY · DEMO</small><strong>${escapeHtml(current.reviewerName||'Sireesha Podota')}</strong></span>`:''}`:'<span><small>APPLICATION</small><strong>No applications submitted</strong></span>'}</div></div>${current&&current.status==='Approved'?`<div class="qr-placeholder"><img id="home-qr" alt="Demo leave application QR code" style="display:block;width:132px;height:132px;padding:5px;background:#fff;border-radius:12px"><small>Scan to open the saved letter</small></div>`:'<div class="qr-placeholder"><div><b>QR available after applying</b><br>Submit a letter to view its QR code</div></div>'}</section>
+  <div class="section-head"><h2>Application Overview</h2><button class="text-button" id="refresh">Refresh ↻</button></div><section class="stats"><article class="stat stat-total"><span class="stat-label">Total</span><strong class="stat-value">${counts.total}</strong></article><article class="stat stat-pending"><span class="stat-label">Pending</span><strong class="stat-value">${counts.pending}</strong></article><article class="stat stat-approved"><span class="stat-label">Approved</span><strong class="stat-value">${counts.approved}</strong></article><article class="stat stat-rejected"><span class="stat-label">Rejected</span><strong class="stat-value">${counts.rejected}</strong></article><article class="stat stat-expired"><span class="stat-label">Expired</span><strong class="stat-value">${counts.expired}</strong></article></section>
+  <div class="dashboard-grid"><section class="apply-card"><div class="apply-card-art" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M13 7h15l8 8v25H13z"/><path d="M28 7v9h8M19 24h11M19 30h11M19 36h7"/></svg></div><div class="apply-card-body"><h3>Apply for Leave</h3><p>Write and submit your leave letter.</p><button class="primary" id="dashboard-apply">+ Start Application</button></div></section><section class="panel recent-card"><div class="section-head"><h2>Recent Activity</h2><button class="text-button" id="open-history">View all →</button></div>${recent.length?`<div class="recent-list">${recent.map(a=>`<button class="recent-item" type="button" data-open-app="${escapeHtml(a.id)}"><span><strong>${escapeHtml(a.subject||'Leave application')}</strong><small>${escapeHtml(formatDateTime(a.submittedAt))}</small></span><span class="status-label ${isApplicationExpired(a,today)?'expired-label':a.status==='Approved'?'status-approved':a.status==='Rejected'?'status-rejected':'status-pending'}">${isApplicationExpired(a,today)?'Expired':escapeHtml(a.status)}</span></button>`).join('')}</div>`:'<div class="empty-state muted">No activity yet. Your submitted letters will appear here.</div>'}</section></div>`;
+  $('refresh').addEventListener('click',()=>{try{applications=JSON.parse(localStorage.getItem(applicationsKey(profile.email))||'[]');renderPage();showToast('Refreshed');}catch(e){showToast('Error');}});
+  $('open-history').addEventListener('click',()=>navigate('history'));
+  $('dashboard-apply').addEventListener('click',()=>navigate('apply'));
+  if(current&&current.status==='Approved')renderQrImage(current,'home-qr');
+  bindApplicationRows();
+}
+function renderApplicationRows(items){return `<div class="application-list">${items.map(a=>`<article class="application-row"><div><strong>${escapeHtml(a.subject||a.type)}</strong><small>${escapeHtml(a.id)} • ${escapeHtml(formatDateTime(a.submittedAt))}</small></div><div class="row-actions"><span class="status-label ${a.status==='Approved'?'status-approved':a.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(a.status)}</span><button class="secondary" data-open-app="${escapeHtml(a.id)}">View</button></div></article>`).join('')}</div>`}
+function bindApplicationRows(){document.querySelectorAll('[data-open-app]').forEach(btn=>btn.addEventListener('click',()=>{selectedApplication=applications.find(a=>a.id===btn.dataset.openApp)||null;if(selectedApplication){currentPage='details';$('page-title').textContent='Application Details';document.querySelectorAll('.portal [data-page]').forEach(n=>n.classList.remove('active'));renderPage();window.scrollTo(0,0)}}))}
+function renderHistory(){$('view').innerHTML=`<div class="section-head"><h2>Application History</h2><button class="primary" id="history-apply">+ Apply</button></div>${applications.length?`<section class="panel">${renderApplicationRows([...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt)))}</section>`:'<section class="panel empty-state"><b>No history</b>Submit your first application</section>'}`;$('history-apply').addEventListener('click',()=>navigate('apply'));bindApplicationRows()}
+function letterTemplate(){return `To\nThe Head of the Department\n${profile.department||''}\n\nSubject: Application for Leave\n\nRespected Sir/Madam,\n\nI am ${profile.name||''}, Roll No. ${profile.roll||''}, studying in Year ${profile.year||''} - ${profile.department||''}, Section ${profile.section||''}. I kindly request leave from [start date] to [end date] due to [reason].\n\nI will make up for any missed academic work. Kindly grant me leave for the requested period.\n\nThanking you.\n\nYours obediently,\n${profile.name||''}\nRoll No.: ${profile.roll||''}\nDate: ${new Intl.DateTimeFormat(undefined,{dateStyle:'long'}).format(new Date())}`}
+function renderApply(){
+  $('view').innerHTML=`<div class="apply-layout"><section class="panel"><div class="draft-header"><h2>Drafting Navigator</h2><p>Your student details are already included. Edit the letter, add your dates and reason, then submit.</p></div><form id="leave-form" novalidate><label class="field"><span>Leave Letter *</span><textarea id="letter" class="draft-textarea" required aria-describedby="letter-count" spellcheck="true"></textarea></label><div class="draft-footer"><span id="letter-count" aria-live="polite">0 / 1500 words</span><span>Student details included automatically</span></div><div id="leave-error" class="auth-error" role="alert"></div><div class="draft-actions"><button class="secondary" type="button" id="cancel-application">Cancel</button><button class="primary" type="submit">Submit Application</button></div></form></section></div>`;
+  $('letter').value=letterTemplate();
+  const updateWordCount=()=>{const count=$('letter').value.trim().split(/\s+/).filter(Boolean).length;$('letter-count').textContent=`${count} / 1500 words`;$('letter-count').classList.toggle('auth-error',count>1500)};
+  $('letter').addEventListener('input',updateWordCount);
+  updateWordCount();
+  $('cancel-application').addEventListener('click',()=>navigate('home'));
+  $('leave-form').addEventListener('submit',submitApplication);
+}
+function submitApplication(e){
+  e.preventDefault();$('leave-error').textContent='';
+  const letter=$('letter').value.trim(),wordCount=letter.split(/\s+/).filter(Boolean).length;
+  if(!letter){$('leave-error').textContent='Write your leave letter before submitting.';return}
+  if(wordCount>1500){$('leave-error').textContent='Keep your letter within 1500 words.';return}
+  if(/\[(?:start date|end date|reason)\]/i.test(letter)){$('leave-error').textContent='Replace the start date, end date, and reason prompts in your letter.';return}
+  if(letter.length<80){$('leave-error').textContent='Please include your leave dates and reason in the letter.';return}
+  const now=new Date().toISOString();
+  const app={id:'LX-'+(globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2,10)}`),student:{name:profile.name,roll:profile.roll,department:profile.department,year:profile.year,section:profile.section,email:profile.email,phone:profile.phone||''},type:'Leave Application',subject:'Application for Leave',recipient:'The Head of the Department',reason:letter,start:'',end:'',letter,submittedAt:now,status:'Approved',reviewerName:'Sireesha Podota',reviewedAt:now,demoApproval:true,parentPhone:''};
+  try{applications.push(app);localStorage.setItem(applicationsKey(profile.email),JSON.stringify(applications));localStorage.setItem(verificationKey(app.id),JSON.stringify(app));}catch(error){applications=applications.filter(item=>item.id!==app.id);$('leave-error').textContent='Could not save this application for the QR preview. Check browser storage and try again.';return}
+  selectedApplication=app;showToast('Application submitted. Demo status: Approved by Sireesha Podota.');navigate('details');
+}
+function renderDetails(){
+  if(!selectedApplication){navigate('history');return}
+  const app=selectedApplication,s=app.student||{};
+  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · DEMO</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR opens this saved verification preview. Keep this HTML and its saved browser data on the device. Demo only; not an official approval.</p><p><b>Reviewed by:</b> ${escapeHtml(app.reviewerName||'Sireesha Podota')} · Demo</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Reviewed by · Demo</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
+  if(app.status==='Approved')renderQrImage(app,'detail-qr');
+  $('back-history').addEventListener('click',()=>navigate('history'));
+}
+function renderProfile(){
+  const yd=profile.year?(profile.year==='1'?'1st Year':profile.year==='2'?'2nd Year':profile.year==='3'?'3rd Year':'4th Year'):'';
+  $('view').innerHTML=`<section class="panel"><form class="profile-grid"><label class="field"><span>Full Name</span><input value="${escapeHtml(profile.name)}" readonly></label><label class="field"><span>Email</span><input value="${escapeHtml(profile.email)}" readonly></label><label class="field"><span>Roll Number</span><input value="${escapeHtml(profile.roll)}" readonly></label><label class="field"><span>Department</span><input value="${escapeHtml(profile.department)}" readonly></label><label class="field"><span>Year</span><input value="${escapeHtml(yd)}" readonly></label><label class="field"><span>Section</span><input value="${escapeHtml(profile.section)}" readonly></label><label class="field span-2"><span>Phone</span><input value="${escapeHtml(profile.phone||'')}" readonly></label><div class="actions span-2"><button class="danger" type="button" id="logout">Sign Out</button></div></form></section>`;
+  $('logout').addEventListener('click',logout);
+}
+function renderHelp(){$('view').innerHTML=`<section class="panel"><div class="help-list"><article class="help-item"><strong>LEAVE X</strong><p>Premium student leave management portal.</p></article><article class="help-item"><strong>Apply</strong><p>Your profile details are added to a simple editable leave-letter template.</p></article><article class="help-item"><strong>Track</strong><p>View submitted letters and their demo QR previews in History.</p></article></div></section>`}
+function renderPage(){if(currentPage==='home')renderHome();else if(currentPage==='history')renderHistory();else if(currentPage==='apply')renderApply();else if(currentPage==='profile')renderProfile();else if(currentPage==='help')renderHelp();else if(currentPage==='details')renderDetails()}
+function logout(){profile=null;applications=[];$('portal').classList.add('hidden');$('auth').classList.remove('hidden');$('password').value='';$('confirm').value='';$('email').value='';setMode('login');window.scrollTo(0,0)}
+document.querySelectorAll('.bottom-nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+document.querySelectorAll('.side-nav [data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$('sidebar-logout').addEventListener('click',logout);
+openVerificationFromHash();
+window.addEventListener('hashchange',openVerificationFromHash);
+</script>
+</body>
+</html>
