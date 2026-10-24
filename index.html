@@ -461,7 +461,27 @@ $('auth-form').addEventListener('submit',event=>{
 });
 function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate('home');window.scrollTo(0,0)}
 function navigate(page){currentPage=page;if(page!=='details')selectedApplication=null;document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=({home:'Home',history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';renderPage();window.scrollTo(0,0)}
-function verificationUrl(app){const url=new URL(location.href);url.hash='verify/'+encodeURIComponent(app.id);return url.href}
+function verificationPayload(app){
+  const preview={id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||''},type:app.type||'Leave Application',start:app.start||'',end:app.end||'',letter:app.letter,submittedAt:app.submittedAt,status:app.status};
+  const bytes=new TextEncoder().encode(JSON.stringify({version:1,application:preview}));
+  let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function verificationUrl(app){
+  if(location.protocol!=='https:'&&location.protocol!=='http:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
+  const url=new URL(location.href);url.hash='verify2/'+verificationPayload(app);return url.href
+}
+function decodeVerificationPayload(encoded){
+  try{
+    if(!/^[A-Za-z0-9_-]+$/.test(encoded))return null;
+    const base64=encoded.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-encoded.length%4)%4);
+    const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+    const payload=JSON.parse(new TextDecoder().decode(bytes));
+    const app=payload?.application;
+    if(payload?.version!==1||!app||typeof app.id!=='string'||app.status!=='Approved'||typeof app.letter!=='string'||!app.student||typeof app.submittedAt!=='string'||!Number.isFinite(Date.parse(app.submittedAt)))return null;
+    return app;
+  }catch(error){return null}
+}
 function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
   const qr=qrcode(0,'M');qr.addData(verificationUrl(app));qr.make();return qr.createDataURL(6,4);
@@ -479,11 +499,17 @@ function showVerification(app){
   window.scrollTo(0,0);
 }
 function openVerificationFromHash(){
+  if(location.hash.startsWith('#verify2/')){
+    const app=decodeVerificationPayload(location.hash.slice('#verify2/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This QR code is invalid or incomplete. Scan a fresh QR code from the deployed portal.</section>'}
+    return true;
+  }
   if(!location.hash.startsWith('#verify/'))return false;
   let id='';try{id=decodeURIComponent(location.hash.slice('#verify/'.length))}catch(error){id=''}
   let app=null;try{app=JSON.parse(localStorage.getItem(verificationKey(id))||'null')}catch(error){app=null}
   if(app&&app.id===id&&app.status==='Approved')showVerification(app);
-  else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This application preview is not saved in this browser. Public cross-device verification requires a connected server.</section>'}
+  else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This older QR only works on the device where it was created. Submit again from the updated deployed portal to create a shareable QR.</section>'}
   return true;
 }
 function latestApplication(){return[...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt))[0]||null}
@@ -549,7 +575,7 @@ function submitApplication(e){
 function renderDetails(){
   if(!selectedApplication){navigate('history');return}
   const app=selectedApplication,s=app.student||{};
-  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR opens this saved verification preview in this browser. It is not an official college approval.</p><p><b>Preview reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Preview reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
+  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR carries this application preview in its link, so it can open on another phone. Anyone with the QR can read the leave letter. It is not an official college approval.</p><p><b>Preview reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Preview reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
   if(app.status==='Approved')renderQrImage(app,'detail-qr');
   $('back-history').addEventListener('click',()=>navigate('history'));
 }
