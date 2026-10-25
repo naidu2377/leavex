@@ -631,7 +631,13 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .portal .dash-intro .dash-tags .date-pill{gap:4px;padding:4px 6px;font-size:9px;line-height:1.2}
 .portal .dash-intro .dash-tags .date-pill svg{width:10px;height:10px}
 @media(max-width:720px){.dash-profile-row{gap:12px}.dash-profile-row .avatar{width:50px;height:50px}.dash-profile-row h2{font-size:22px;letter-spacing:-.5px}.portal .dash-intro .dash-tags{margin-top:10px;gap:6px}.portal .dash-intro .dash-tag{font-size:9px}.portal .dash-intro .dash-tags .date-pill{padding:4px 7px}}
-</style>
+/* Keep the dashboard and details QR compact; tap to open the scan-sized view. */
+.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,160px)}
+.status-card.status-qr-card .status-qr-panel{max-width:160px}
+.qr-result{grid-template-columns:120px minmax(0,1fr)}
+.qr-result img{width:120px;height:120px}
+@media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,100px)}.status-card.status-qr-card .status-qr-panel{max-width:100px}}
+@media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,88px)}.status-card.status-qr-card .status-qr-panel{max-width:88px}.qr-result{grid-template-columns:96px minmax(0,1fr)}.qr-result img{width:96px;height:96px}}</style>
 </head>
 <body>
 <main id="auth" class="auth-shell">
