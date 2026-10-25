@@ -184,23 +184,38 @@ a{color:inherit;text-decoration:none}
 .verification-mode .topbar,.verification-mode .bottom-nav{display:none}
 .verification-mode:not(.hidden){display:block}
 .verification-mode .sidebar{display:none}
-.verification-mode .main{max-width:540px;padding:18px 16px 30px}
-.verify-banner{display:grid;justify-items:center;gap:5px;padding:24px 18px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#00d968,#00b957);color:#04150b;text-align:center}
-.verify-banner .verify-shield{font-size:27px;line-height:1}
-.verify-banner strong{font-size:22px;letter-spacing:.5px}
-.verify-banner span{font-size:13px;font-weight:700}
-.verify-student{display:flex;align-items:center;gap:13px;padding:16px;border-bottom:1px solid var(--border)}
-.verify-student .avatar{flex:none}
-.verify-student strong,.verify-student small{display:block}
-.verify-student small{color:var(--text-secondary);font-size:12px}
-.verify-meta{display:flex;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.verify-meta span{display:grid;gap:3px}
-.verify-meta small{color:var(--text-secondary);font-size:10px;letter-spacing:1px;text-transform:uppercase}
-.verify-meta strong{overflow-wrap:anywhere;font-size:12px}
-.verify-letter-label{padding:14px 16px 0;color:var(--text-secondary);font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
-.verify-letter{margin:10px 16px 16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:var(--text-primary);font-size:13px}
-.verify-contacts{display:flex;gap:10px;padding:0 16px 16px}
-.verify-contacts a{flex:1;text-align:center;padding:10px;border:1px solid var(--border);border-radius:12px;color:var(--text-primary);font-size:12px}
+.verification-mode .main{width:min(100%,520px);max-width:520px;min-height:100dvh;margin:0 auto;padding:0 0 18px;display:block;background:#101116}
+.verify-banner{min-height:174px;display:grid;align-content:center;justify-items:center;gap:9px;padding:24px 18px;background:#00c853;color:#f4fff8;text-align:center}
+.verify-banner .verify-shield{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.11)}
+.verify-banner .verify-shield svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.verify-banner strong{font-size:clamp(20px,5vw,27px);line-height:1.2;letter-spacing:.3px}
+.verify-banner span{font-size:13px;font-weight:650}
+.verify-content{display:block;padding:0;border:0;border-radius:0;background:#101116}
+.verify-student{display:flex;align-items:center;gap:14px;min-width:0;padding:24px 26px;border-bottom:1px solid #1a1b24}
+.verify-student .avatar{width:66px;height:66px;display:grid;place-items:center;flex:none;border:1px solid #20212d;border-radius:17px;background:#15151f;color:#7772ff;box-shadow:none}
+.verify-student .avatar svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.verify-student-info{display:grid;gap:5px;min-width:0}
+.verify-student strong{display:block;min-width:0;overflow-wrap:anywhere;font-size:clamp(16px,4.3vw,22px);font-weight:650;line-height:1.3}
+.verify-student-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.verify-roll{padding:2px 8px;border-radius:5px;background:rgba(119,114,255,.14);color:#8c86ff;font-size:12px;font-weight:700}
+.verify-department,.verify-year-section{color:#8790a3;font-size:12px}
+.verify-year-section{display:block}
+.verify-meta{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:16px;padding:23px 28px;border-bottom:1px solid #1a1b24}
+.verify-meta-item{display:grid;grid-template-columns:19px minmax(0,1fr);align-items:start;gap:10px;min-width:0}
+.verify-meta-item:last-child:not(:first-child){justify-items:end;text-align:right}
+.verify-meta-item>svg,.verify-letter-label>svg{width:18px;height:18px;margin-top:2px;fill:none;stroke:#59677d;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.verify-meta-item span{display:grid;gap:2px;min-width:0}
+.verify-meta small{color:#758096;font-size:10px;font-weight:650;letter-spacing:.7px;text-transform:uppercase}
+.verify-meta strong{overflow-wrap:anywhere;color:#aeb8ca;font-size:15px;font-weight:550;line-height:1.4}
+.verify-letter-section{padding:20px 28px 14px}
+.verify-letter-label{display:flex;align-items:center;gap:10px;margin:0 0 8px;color:#758096;font-size:11px;font-weight:750;letter-spacing:.75px;text-transform:uppercase}
+.verify-letter{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#aeb8ca;font-size:14px;line-height:1.75}
+.verify-extra-meta{padding:0 28px 18px;color:#8790a3;font-size:12px}
+.verify-extra-meta strong{color:#aeb8ca;font-weight:550}
+.verify-contacts{display:flex;gap:10px;padding:16px 26px 22px}
+.verify-contacts a{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-width:0;padding:12px 10px;border:1px solid #1d1e28;border-radius:13px;background:#15151f;color:#e4e8f0;font-size:14px;font-weight:600}
+.verify-contacts svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.verify-footer{padding:12px 26px 4px;border-top:1px solid #1a1b24;color:#596579;font-size:11px;text-align:center}
 .qr-result{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:18px;padding:18px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface)}
 .qr-result img{display:block;width:150px;height:150px;padding:7px;border-radius:13px;background:#fff;image-rendering:pixelated}
 .qr-result p{margin:5px 0 0;color:var(--text-secondary);font-size:12px}
@@ -283,7 +298,7 @@ a{color:inherit;text-decoration:none}
 @media(max-width:720px){.portal>.topbar .brand{gap:8px}.portal>.topbar .brand-copy{display:none}.portal>.topbar .topbar-text h1{font-size:16px;letter-spacing:-.4px;white-space:nowrap}.portal>.topbar .user-chip{gap:7px;padding:5px 9px 5px 6px}.portal>.topbar .user-chip small{display:none}.portal>.topbar .user-chip strong{display:block;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.dash-intro{position:relative;padding-right:0}.dash-intro .date-pill{position:static;margin:0!important;padding:4px 8px;font-size:9px;letter-spacing:.3px;white-space:nowrap}.dash-intro>div:nth-child(2){flex:1;min-width:0;max-width:none}.dash-intro h2{overflow-wrap:anywhere}.dash-tags{position:static;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0}}
 .portal.verification-mode:not(.hidden){display:block}
 .portal.verification-mode>.topbar,.portal.verification-mode>.bottom-nav,.portal.verification-mode>.sidebar{display:none}
-.portal.verification-mode>.main{grid-column:auto;grid-row:auto;max-width:540px;padding:18px 16px 30px}
+.portal.verification-mode>.main{grid-column:auto;grid-row:auto;width:min(100%,520px);max-width:520px;min-height:100dvh;margin:0 auto;padding:0 0 18px;display:block;background:#101116}
 @media(min-width:721px) and (max-width:960px){.portal:not(.hidden){grid-template-columns:76px minmax(0,1fr)}.sidebar{padding:18px 10px}.sidebar-brand{padding:0 8px 17px}.sidebar-brand .brand-copy,.side-label,.side-nav button>span:not(.nav-icon),.side-logout>span:not(.nav-icon){display:none}.sidebar-brand .brand-logo{width:40px;height:40px}.side-nav button,.side-logout{justify-content:center;padding:12px 8px}.side-nav .nav-icon,.side-logout .nav-icon{width:20px;height:20px}.dashboard-grid{grid-template-columns:minmax(200px,.72fr) minmax(260px,1fr)}}
 
 .portal>.main{max-width:840px;justify-self:center;padding:22px clamp(22px,3vw,42px) 48px}
@@ -547,19 +562,23 @@ function branchHeaderLabel(department){const value=String(department||'Student')
 function branchTagLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].toUpperCase();if(value==='Mechanical Engineering')return 'MECH';if(value==='Civil Engineering')return 'CIVIL';return code}
 function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('user-roll').textContent=profile.roll||'';$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate('home');window.scrollTo(0,0)}
 function navigate(page){currentPage=page;if(page!=='details')selectedApplication=null;document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=page==='home'?branchHeaderLabel(profile?.department):({history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';renderPage();window.scrollTo(0,0)}
+function verificationApplication(app){
+  return{id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||'',phone:app.student?.phone||''},type:app.type||'Leave Application',subject:app.subject||'',recipient:app.recipient||'',reason:app.reason||app.letter||'',start:app.start||'',end:app.end||'',letter:app.letter||'',submittedAt:app.submittedAt||'',status:app.status||'',reviewerName:app.reviewerName||'',reviewedAt:app.reviewedAt||'',parentPhone:app.parentPhone||''};
+}
+function validVerificationApplication(app){
+  return!!app&&typeof app.id==='string'&&app.id.length>0&&app.status==='Approved'&&typeof app.letter==='string'&&app.letter.trim().length>0&&!!app.student&&typeof app.student.name==='string'&&app.student.name.trim().length>0&&typeof app.student.roll==='string'&&app.student.roll.trim().length>0&&typeof app.student.department==='string'&&app.student.department.trim().length>0&&typeof app.submittedAt==='string'&&Number.isFinite(Date.parse(app.submittedAt));
+}
 function verificationPayload(app){
-  const preview={id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||''},type:app.type||'Leave Application',start:app.start||'',end:app.end||'',letter:app.letter,submittedAt:app.submittedAt,status:app.status};
-  const bytes=new TextEncoder().encode(JSON.stringify({version:1,application:preview}));
+  const bytes=new TextEncoder().encode(JSON.stringify({version:1,application:verificationApplication(app)}));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
   return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 async function verificationUrl(app){
   if(location.protocol!=='https:'&&location.protocol!=='http:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
+  if(!validVerificationApplication(verificationApplication(app)))throw new Error('A complete approved application is required to create a verification QR code.');
   const url=new URL(location.href);
   if(typeof CompressionStream==='function'){
-    // Keep the portable QR small: its scan preview needs identity and approval metadata,
-    // while the full letter remains in this browser's local application history.
-    const payload=[2,app.student?.name||'',app.student?.roll||'',app.student?.department||'',app.submittedAt,app.reviewerName||''];
+    const payload={version:1,application:verificationApplication(app)};
     const bytes=new TextEncoder().encode(JSON.stringify(payload));
     const compressed=await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer();
     let binary='';for(const byte of new Uint8Array(compressed))binary+=String.fromCharCode(byte);
@@ -574,7 +593,7 @@ function decodeVerificationPayload(encoded){
     const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
     const payload=JSON.parse(new TextDecoder().decode(bytes));
     const app=payload?.application;
-    if(payload?.version!==1||!app||typeof app.id!=='string'||app.status!=='Approved'||typeof app.letter!=='string'||!app.student||typeof app.submittedAt!=='string'||!Number.isFinite(Date.parse(app.submittedAt)))return null;
+    if(payload?.version!==1||!validVerificationApplication(app))return null;
     return app;
   }catch(error){return null}
 }
@@ -585,13 +604,8 @@ async function decodeCompressedVerificationPayload(encoded){
     const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
     const decompressed=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer();
     const payload=JSON.parse(new TextDecoder().decode(decompressed));
-    if(Array.isArray(payload)&&payload[0]===2&&payload.length===6){
-      const [,name,roll,department,submittedAt,reviewerName]=payload;
-      if(typeof name!=='string'||typeof roll!=='string'||typeof department!=='string'||typeof submittedAt!=='string'||!Number.isFinite(Date.parse(submittedAt))||typeof reviewerName!=='string')return null;
-      return{id:'',student:{name,roll,department},type:'Leave Application',submittedAt,status:'Approved',reviewerName,letter:''};
-    }
     const app=payload?.application;
-    if(payload?.version!==1||!app||typeof app.id!=='string'||app.status!=='Approved'||typeof app.letter!=='string'||!app.student||typeof app.submittedAt!=='string'||!Number.isFinite(Date.parse(app.submittedAt)))return null;
+    if(payload?.version!==1||!validVerificationApplication(app))return null;
     return app;
   }catch(error){return null}
 }
@@ -605,10 +619,19 @@ async function renderQrImage(app,targetId){
   catch(error){target.classList.add('hidden');showToast(error.message||'Could not generate the application QR code.');}
 }
 function showVerification(app){
+  if(!validVerificationApplication(app)){
+    $('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');
+    $('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This QR does not contain a complete approved application preview.</section>';
+    return;
+  }
   $('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');
-  const student=app.student||{},initial=(student.name||'S').trim().charAt(0).toUpperCase();
-  const contacts=[student.phone?`<a href="tel:${escapeHtml(student.phone)}">Student · ${escapeHtml(student.phone)}</a>`:'',app.parentPhone?`<a href="tel:${escapeHtml(app.parentPhone)}">Parent · ${escapeHtml(app.parentPhone)}</a>`:''].filter(Boolean).join('');
-  $('view').innerHTML=`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="panel" style="padding:0;gap:0"><div class="verify-student"><div class="avatar">${escapeHtml(initial)}</div><div><strong>${escapeHtml(student.name||'Student')}</strong><small>${escapeHtml(student.roll||'Roll number not provided')} · ${escapeHtml(student.department||'Department not provided')}</small><small>${escapeHtml([student.year?`Year ${student.year}`:'',student.section?`Section ${student.section}`:''].filter(Boolean).join(' · '))}</small></div></div><div class="verify-meta"><span><small>Submission date</small><strong>${escapeHtml(formatDate(app.submittedAt))}</strong></span><span><small>Time</small><strong>${escapeHtml(new Intl.DateTimeFormat(undefined,{timeStyle:'short'}).format(new Date(app.submittedAt)))}</strong></span></div>${app.letter?`<div class="verify-meta"><span><small>Leave type</small><strong>${escapeHtml(app.type||'Leave Application')}</strong></span><span><small>Requested dates</small><strong>${app.start&&app.end?`${escapeHtml(formatDate(app.start))} – ${escapeHtml(formatDate(app.end))}`:'See dates in submitted letter'}</strong></span></div><div class="verify-letter-label">Leave application · ${escapeHtml(app.id)}</div><div class="verify-letter">${escapeHtml(app.letter)}</div>`:`<p class="verification-note" style="padding:16px">This compact QR contains the approved student preview. The full leave letter is not embedded.</p>`}${contacts?`<div class="verify-contacts">${contacts}</div>`:''}<p class="verification-note" style="padding:0 16px 16px">This locally saved preview is not an official college approval or verification.</p></section>`;
+  const student=app.student,department=String(student.department||'').split(' - ').pop(),yearSection=[student.year?`Year ${student.year}`:'',student.section?student.section:''].filter(Boolean).join(' · ');
+  const submitted=new Date(app.submittedAt),submittedDate=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(submitted),submittedTime=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',hour12:true}).format(submitted);
+  const phoneSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.4 2.7a2 2 0 0 1-.6 1.7L7.6 9.4a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 1.7-.6l2.7.4a2 2 0 0 1 1.7 2Z"/></svg>';
+  const contacts=[student.phone?`<a href="tel:${escapeHtml(student.phone)}">${phoneSvg}Student</a>`:'',app.parentPhone?`<a href="tel:${escapeHtml(app.parentPhone)}">${phoneSvg}Parent</a>`:''].filter(Boolean).join('');
+  const reviewer=app.reviewerName?`<div class="verify-extra-meta">Reviewed by <strong>${escapeHtml(app.reviewerName)}</strong>${app.reviewedAt?` · ${escapeHtml(formatDateTime(app.reviewedAt))}`:''}</div>`:'';
+  const leaveReason=String(app.reason||app.letter).trim();
+  $('view').innerHTML=`<section class="verify-banner"><span class="verify-shield" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="verify-content"><div class="verify-student"><div class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></div><div class="verify-student-info"><strong>${escapeHtml(student.name)}</strong><div class="verify-student-meta"><span class="verify-roll">${escapeHtml(student.roll)}</span><span class="verify-department">${escapeHtml(department)}</span></div>${yearSection?`<small class="verify-year-section">${escapeHtml(yearSection)}</small>`:''}</div></div><div class="verify-meta"><div class="verify-meta-item"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span><small>Submission date</small><strong>${escapeHtml(submittedDate)}</strong></span></div><div class="verify-meta-item"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><small>Time</small><strong>${escapeHtml(submittedTime)}</strong></span></div></div><section class="verify-letter-section"><div class="verify-letter-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v5h4M10 12h6M10 16h6"/></svg>Leave reason and letter</div><div class="verify-letter">${escapeHtml(leaveReason)}</div>${app.letter!==leaveReason?`<div class="verify-letter-label" style="margin-top:22px">Complete leave letter</div><div class="verify-letter">${escapeHtml(app.letter)}</div>`:''}</section>${reviewer}${contacts?`<div class="verify-contacts">${contacts}</div>`:''}<footer class="verify-footer">LEAVE X Security Verification System &middot; Powered by Nec Hostel<br>Local preview only &mdash; this static site cannot independently verify college approval.</footer></section>`;
   window.scrollTo(0,0);
 }
 async function openVerificationFromHash(){
@@ -698,7 +721,7 @@ function submitApplication(e){
 function renderDetails(){
   if(!selectedApplication){navigate('history');return}
   const app=selectedApplication,s=app.student||{};
-  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The compact QR carries the student and approval preview so it can open on another phone. The full leave letter stays in this browser's local history and is not included. This is not an official college approval.</p><p><b>Preview reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Preview reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
+  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR contains this application and its full leave letter so it can open on another phone. Anyone with the QR can read these details. This is a local preview, not official college verification.</p><p><b>Preview reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Preview reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
   if(app.status==='Approved')renderQrImage(app,'detail-qr');
   $('back-history').addEventListener('click',()=>navigate('history'));
 }
