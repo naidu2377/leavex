@@ -726,7 +726,7 @@ $('auth-form').addEventListener('submit',event=>{
   openPortal();
 });
 function branchHeaderLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].toUpperCase(),labels={'CSE':'COMPUTER SCIENCE','CSE (AI & ML)':'CSE AI & ML','CSE (DATA SCIENCE)':'CSE DATA SCIENCE','IT':'INFORMATION TECHNOLOGY','ECE':'ECE COMMUNICATION','EEE':'EEE ELECTRICAL','EIE':'EIE INSTRUMENTATION','AI & DS':'AI & DATA SCIENCE'};return labels[code]||(value.split(' - ').pop()||value).toUpperCase()}
-function branchTagLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].toUpperCase();if(value==='Mechanical Engineering')return 'MECH';if(value==='Civil Engineering')return 'CIVIL';return code}
+function branchTagLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].trim().toUpperCase();if(code==='COMPUTER SCIENCE'||code==='COMPUTER SCIENCE AND ENGINEERING')return 'CSE';if(code.startsWith('CSE'))return code;if(value==='Mechanical Engineering')return 'MECH';if(value==='Civil Engineering')return 'CIVIL';return code}
 const routablePages=new Set(['home','history','apply','profile','help','details']);
 function pageFromLocation(){const page=location.hash.slice(1);return routablePages.has(page)?page:null}
 function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('user-roll').textContent=profile.roll||'';$('portal-branch').textContent=branchHeaderLabel(profile.department);$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate(pageFromLocation()||'home',{historyMode:pageFromLocation()?'none':'replace'});window.scrollTo(0,0)}
