@@ -90,6 +90,7 @@ a{color:inherit;text-decoration:none}
 .user-chip{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:999px;padding:8px 16px 8px 10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
 .avatar{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(119,114,255,0.9),rgba(90,80,255,0.8));display:grid;place-items:center;font-weight:800;box-shadow:0 0 0 1px rgba(119,114,255,0.5)}
 .user-chip small{display:block;color:var(--text-secondary);font-size:12px}
+.mobile-logout{display:none}
 
 .main{display:grid;gap:20px;padding:6px clamp(16px,8vw,90px) calc(110px + env(safe-area-inset-bottom,0));max-width:1180px;margin:0 auto}
 
@@ -363,6 +364,10 @@ a{color:inherit;text-decoration:none}
 .status-card.approved .status-qr-caption{color:#9fbaaa}
 @media(max-width:720px){.portal>.main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0))}.portal>.topbar{align-items:center;gap:10px;padding:14px 14px 10px}.portal>.topbar .topbar-group{flex:1;min-width:0;gap:8px}.portal>.topbar .brand-logo{width:36px;height:36px}.portal>.topbar .topbar-text{min-width:0}.portal>.topbar .topbar-text .eyebrow{display:block;font-size:8px;letter-spacing:1.1px}.portal>.topbar .topbar-text h1{display:block;max-width:100%;font-size:clamp(11px,3.2vw,14px);letter-spacing:.25px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.portal>.topbar .user-chip{flex:none;gap:6px;padding:5px 8px 5px 6px}.portal>.topbar .user-chip .avatar{width:32px;height:32px}.portal>.topbar .user-chip strong{display:none}.portal>.topbar .user-chip small{display:block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}}
 @media(max-width:720px){.status-card{grid-template-columns:minmax(0,1fr) minmax(108px,120px)}.status-card .status-qr-panel{max-width:126px}.status-card .status-meta{grid-template-columns:minmax(0,1fr);gap:12px;margin-top:20px}}
+.mobile-logout svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:720px){.portal>.topbar{justify-content:space-between;align-items:center;gap:12px;padding:16px 16px 12px;border-bottom:1px solid var(--border)}.portal>.topbar .brand{display:none}.portal>.topbar .topbar-group{flex:1;min-width:0;gap:0}.portal>.topbar .topbar-text .eyebrow{display:block;font-size:13px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.portal>.topbar .topbar-text h1{display:none}.portal>.topbar .user-chip{display:none}.mobile-logout{display:grid;place-items:center;flex:none;width:46px;height:46px;padding:0;border:1px solid rgba(255,64,87,.48);border-radius:14px;background:rgba(255,64,87,.06);color:var(--status-rejected);box-shadow:0 0 18px rgba(255,64,87,.13)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-approved{grid-column:1/-1}.portal>.bottom-nav{left:0;bottom:0;transform:none;width:100%;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0));border-right:0;border-bottom:0;border-left:0;border-radius:20px 20px 0 0}.portal>.bottom-nav button{min-width:0;gap:5px;padding:6px 2px;font-size:11px}.portal>.bottom-nav .apply-nav .nav-icon{width:54px;height:54px;margin-top:-28px;border-radius:16px;background:linear-gradient(145deg,#7e79ff,#5147ed);box-shadow:0 12px 28px rgba(81,71,237,.42),0 0 0 1px rgba(166,160,255,.34)}}
+@media(max-width:720px){.dash-intro .date-pill{position:static;margin:0!important;padding:4px 8px;font-size:9px;letter-spacing:.3px}}
+@media(max-width:720px){.dashboard-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -470,6 +475,7 @@ a{color:inherit;text-decoration:none}
         <h1 id="page-title">Home</h1>
       </div>
     </div>
+    <button class="mobile-logout" id="mobile-logout" type="button" aria-label="Log out" title="Log out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v10"/><path d="M6.2 5.8a8 8 0 1 0 11.6 0"/></svg></button>
     <div class="user-chip">
       <div id="avatar" class="avatar">S</div>
       <div>
@@ -671,6 +677,7 @@ function logout(){profile=null;applications=[];$('portal').classList.add('hidden
 document.querySelectorAll('.bottom-nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
 document.querySelectorAll('.side-nav [data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
 $('sidebar-logout').addEventListener('click',logout);
+$('mobile-logout').addEventListener('click',logout);
 openVerificationFromHash();
 window.addEventListener('hashchange',openVerificationFromHash);
 </script>
