@@ -638,6 +638,19 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .qr-result img{width:120px;height:120px}
 @media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,100px)}.status-card.status-qr-card .status-qr-panel{max-width:100px}}
 @media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,88px)}.status-card.status-qr-card .status-qr-panel{max-width:88px}.qr-result{grid-template-columns:96px minmax(0,1fr)}.qr-result img{width:96px;height:96px}}</style>
+<style>
+/* Small dashboard QR preview; tap it for a phone-camera-friendly scan size. */
+.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,72px)}
+.status-card.status-qr-card .status-qr-panel{max-width:72px;gap:5px}
+.status-card.status-qr-card .status-qr-frame{padding:0}
+.status-card.status-qr-card .status-qr-button{padding:4px;border-radius:9px}
+.status-card.status-qr-card .status-qr-caption{font-size:8px;letter-spacing:.6px}
+.status-qr-dialog img{width:260px;height:260px}
+.qr-result{grid-template-columns:100px minmax(0,1fr)}
+.qr-result img{width:100px;height:100px}
+@media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,64px);gap:8px;padding:17px 12px}.status-card.status-qr-card .status-qr-panel{max-width:64px}.status-card.status-qr-card .status-qr-button{padding:2px}.status-qr-dialog img{width:230px;height:230px}}
+@media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,60px);gap:6px;padding:16px 9px}.status-card.status-qr-card .status-qr-panel{max-width:60px}.status-card.status-qr-card .status-qr-caption{font-size:6px;letter-spacing:.3px}.qr-result{grid-template-columns:88px minmax(0,1fr)}.qr-result img{width:88px;height:88px}}
+</style>
 </head>
 <body>
 <main id="auth" class="auth-shell">
@@ -877,7 +890,7 @@ function decodePortableVerificationPayload(encoded){
 }
 async function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
-  const qr=qrcode(0,'M');qr.addData(await verificationUrl(app));qr.make();return qr.createDataURL(4,16);
+  const qr=qrcode(0,'M');qr.addData(await verificationUrl(app));qr.make();return qr.createDataURL(8,32);
 }
 async function renderQrImage(app,targetId){
   const target=$(targetId);if(!target)return;
