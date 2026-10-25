@@ -166,6 +166,10 @@ a{color:inherit;text-decoration:none}
 .bottom-nav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0));transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;gap:8px;width:min(720px,calc(100% - 16px));padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent),rgba(9,9,15,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 60px 100px -60px rgba(119,114,255,0.6);z-index:10}
 .bottom-nav button{display:grid;gap:6px;justify-items:center;border:0;background:none;color:var(--text-secondary);padding:6px 4px}
 .bottom-nav button.active{color:var(--accent-purple)}
+.bottom-nav button.active:not(.apply-nav){color:var(--text-primary)}
+.bottom-nav button.active:not(.apply-nav) .nav-icon{color:var(--accent-purple)}
+.bottom-nav button[data-page]:not(.apply-nav)::after{content:"";display:block;width:30px;height:4px;margin-top:2px;justify-self:center;border-radius:999px;background:#6857FF;box-shadow:0 0 9px rgba(104,87,255,.32);opacity:0;transition:opacity .18s ease}
+.bottom-nav button[data-page]:not(.apply-nav).active::after{opacity:1}
 .bottom-nav .apply-nav{color:var(--text-primary)}
 .bottom-nav .apply-nav .nav-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,rgba(119,114,255,0.95),rgba(90,80,255,0.9));margin-top:-28px;box-shadow:0 30px 60px -30px rgba(119,114,255,0.9),0 0 0 1px rgba(119,114,255,0.6)}
 .nav-icon{width:20px;height:20px;display:grid;place-items:center}
@@ -587,8 +591,10 @@ $('auth-form').addEventListener('submit',event=>{
 });
 function branchHeaderLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].toUpperCase(),labels={'CSE':'COMPUTER SCIENCE','CSE (AI & ML)':'CSE AI & ML','CSE (DATA SCIENCE)':'CSE DATA SCIENCE','IT':'INFORMATION TECHNOLOGY','ECE':'ECE COMMUNICATION','EEE':'EEE ELECTRICAL','EIE':'EIE INSTRUMENTATION','AI & DS':'AI & DATA SCIENCE'};return labels[code]||(value.split(' - ').pop()||value).toUpperCase()}
 function branchTagLabel(department){const value=String(department||'Student').trim(),code=value.split(' - ')[0].toUpperCase();if(value==='Mechanical Engineering')return 'MECH';if(value==='Civil Engineering')return 'CIVIL';return code}
-function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('user-roll').textContent=profile.roll||'';$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate('home');window.scrollTo(0,0)}
-function navigate(page){currentPage=page;if(page!=='details')selectedApplication=null;document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=page==='home'?branchHeaderLabel(profile?.department):({history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';renderPage();window.scrollTo(0,0)}
+const routablePages=new Set(['home','history','apply','profile','help','details']);
+function pageFromLocation(){const page=location.hash.slice(1);return routablePages.has(page)?page:null}
+function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('user-roll').textContent=profile.roll||'';$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();navigate(pageFromLocation()||'home',{historyMode:pageFromLocation()?'none':'replace'});window.scrollTo(0,0)}
+function navigate(page,{historyMode='push'}={}){if(!routablePages.has(page))return;currentPage=page;if(page!=='details')selectedApplication=null;document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=page==='home'?branchHeaderLabel(profile?.department):({history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';const route=`#${page}`;if(historyMode!=='none'&&location.hash!==route)history[historyMode==='replace'?'replaceState':'pushState']({page},'',route);renderPage();window.scrollTo(0,0)}
 function verificationApplication(app){
   return{id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||'',phone:app.student?.phone||''},type:app.type||'Leave Application',subject:app.subject||'',recipient:app.recipient||'',reason:app.reason||app.letter||'',start:app.start||'',end:app.end||'',letter:app.letter||'',submittedAt:app.submittedAt||'',status:app.status||'',reviewerName:app.reviewerName||'',reviewedAt:app.reviewedAt||'',parentPhone:app.parentPhone||''};
 }
@@ -720,7 +726,7 @@ function renderHome(){
   bindApplicationRows();
 }
 function renderApplicationRows(items){return `<div class="application-list">${items.map(a=>`<article class="application-row"><div><strong>${escapeHtml(a.subject||a.type)}</strong><small>${escapeHtml(a.id)} • ${escapeHtml(formatDateTime(a.submittedAt))}</small></div><div class="row-actions"><span class="status-label ${a.status==='Approved'?'status-approved':a.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(a.status)}</span><button class="secondary" data-open-app="${escapeHtml(a.id)}">View</button></div></article>`).join('')}</div>`}
-function bindApplicationRows(){document.querySelectorAll('[data-open-app]').forEach(btn=>btn.addEventListener('click',()=>{selectedApplication=applications.find(a=>a.id===btn.dataset.openApp)||null;if(selectedApplication){currentPage='details';$('page-title').textContent='Application Details';document.querySelectorAll('.portal [data-page]').forEach(n=>n.classList.remove('active'));renderPage();window.scrollTo(0,0)}}))}
+function bindApplicationRows(){document.querySelectorAll('[data-open-app]').forEach(btn=>btn.addEventListener('click',()=>{selectedApplication=applications.find(a=>a.id===btn.dataset.openApp)||null;if(selectedApplication){$('page-title').textContent='Application Details';navigate('details')}}))}
 function renderHistory(){$('view').innerHTML=`<div class="section-head"><h2>Application History</h2><button class="primary" id="history-apply">+ Apply</button></div>${applications.length?`<section class="panel">${renderApplicationRows([...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt)))}</section>`:'<section class="panel empty-state"><b>No history</b>Submit your first application</section>'}`;$('history-apply').addEventListener('click',()=>navigate('apply'));bindApplicationRows()}
 function letterTemplate(){return `To\nThe Head of the Department\n${profile.department||''}\n\nSubject: Application for Leave\n\nRespected Sir/Madam,\n\nI am ${profile.name||''}, Roll No. ${profile.roll||''}, studying in Year ${profile.year||''} - ${profile.department||''}, Section ${profile.section||''}. I kindly request leave from [start date] to [end date] due to [reason].\n\nI will make up for any missed academic work. Kindly grant me leave for the requested period.\n\nThanking you.\n\nYours obediently,\n${profile.name||''}\nRoll No.: ${profile.roll||''}\nDate: ${new Intl.DateTimeFormat(undefined,{dateStyle:'long'}).format(new Date())}`}
 function renderApply(){
@@ -765,7 +771,9 @@ document.querySelectorAll('.side-nav [data-page]').forEach(b=>b.addEventListener
 $('sidebar-logout').addEventListener('click',logout);
 $('mobile-logout').addEventListener('click',logout);
 openVerificationFromHash();
-window.addEventListener('hashchange',openVerificationFromHash);
+function restoreNavigationFromLocation(){if(location.hash.startsWith('#verify')){openVerificationFromHash();return}const page=pageFromLocation();if(page&&profile&&!$('portal').classList.contains('hidden')&&page!==currentPage)navigate(page,{historyMode:'none'})}
+window.addEventListener('hashchange',restoreNavigationFromLocation);
+window.addEventListener('popstate',restoreNavigationFromLocation);
 </script>
 </body>
 </html>
