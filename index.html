@@ -828,16 +828,20 @@ function verificationPayload(app){
   return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 async function verificationUrl(app){
-  if(location.protocol!=='https:'&&location.protocol!=='http:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
-  if(!validVerificationApplication(verificationApplication(app)))throw new Error('A complete approved application is required to create a verification QR code.');
-  if(!/^[A-Za-z0-9_-]{22}$/.test(app.verificationToken||'')){
-    app.verificationToken=createVerificationToken();
-    try{localStorage.setItem(verificationKey(app.verificationToken),JSON.stringify(app));if(profile?.email)localStorage.setItem(applicationsKey(profile.email),JSON.stringify(applications))}
-    catch(error){throw new Error('Could not save this demo verification token in browser storage.')}
+  if(location.protocol!=='https:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
+  const application=verificationApplication(app);
+  if(!validVerificationApplication(application))throw new Error('A complete approved application is required to create a verification QR code.');
+  const payload=JSON.stringify({version:1,application});
+  let route;
+  if(typeof CompressionStream==='function'){
+    const compressed=await new Response(new Blob([new TextEncoder().encode(payload)]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer();
+    let binary='';for(const byte of new Uint8Array(compressed))binary+=String.fromCharCode(byte);
+    route='verify3/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }else{
+    const bytes=new TextEncoder().encode(payload);let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+    route='verify2/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   }
-  const url=new URL(location.href);
-  url.hash='verify/'+app.verificationToken;
-  return url.href
+  const url=new URL(location.href);url.hash=route;return url.href
 }
 function decodeVerificationPayload(encoded){
   try{
