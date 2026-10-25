@@ -537,6 +537,12 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .portal>.bottom-nav .apply-nav .nav-icon{border-radius:18px;background:rgba(103,108,122,.34);color:#aeb3bf;box-shadow:0 8px 22px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.035)}
 .portal>.bottom-nav .apply-nav .nav-icon svg{stroke:currentColor}
 @media(max-width:720px){.status-card.approved::before{background-size:40px 28px,28px 20px,68px 64px,50px 48px,62px 58px,78px 68px,54px 48px}}
+/* Use the supplied emerald artwork and keep the verification frame neutral. */
+.status-card.approved{background:#00190d url("today-status-bg.svg") center/cover no-repeat}
+.status-card.approved::before,.status-card.approved::after{background:none;opacity:0}
+.status-card.approved .status-qr-frame{border-color:rgba(55,67,59,.9);background:rgba(4,10,6,.52);box-shadow:0 10px 28px rgba(0,0,0,.38),inset 0 0 0 3px rgba(0,0,0,.35)}
+.status-card.approved .status-qr-button:hover{box-shadow:0 0 0 3px rgba(255,255,255,.22)}
+.status-card.approved .status-qr-button:focus-visible{outline:3px solid #dce9df;outline-offset:3px}
 </style>
 </head>
 <body>

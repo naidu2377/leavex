@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1539 1012" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="field" cx="50%" cy="48%" r="78%">
+      <stop offset="0" stop-color="#00210c"/>
+      <stop offset=".58" stop-color="#001a09"/>
+      <stop offset="1" stop-color="#000c05"/>
+    </radialGradient>
+    <linearGradient id="bandA" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#00ff18" stop-opacity=".92"/>
+      <stop offset=".3" stop-color="#00a719" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#00310e" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="bandB" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#008c17" stop-opacity=".68"/>
+      <stop offset=".58" stop-color="#00400e" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#001509" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#00ff16" stop-opacity=".15"/>
+      <stop offset=".52" stop-color="#28ff00"/>
+      <stop offset="1" stop-color="#00ef22" stop-opacity=".08"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1539" height="1012" fill="url(#field)"/>
+  <path d="M0 0h445L178 263q-12 12-32 12H0z" fill="url(#bandB)"/>
+  <path d="M0 0h252L0 251z" fill="url(#bandA)" opacity=".72"/>
+  <path d="M0 0h112L0 115z" fill="#00f31a" opacity=".8"/>
+  <path d="M0 193 184 0h16L0 211z" fill="url(#beam)" filter="url(#glow)"/>
+  <path d="M0 161 151 0h7L0 170z" fill="#22ff05" opacity=".95"/>
+  <path d="M0 190q16 0 29-13L183 0" fill="none" stroke="#00ff19" stroke-width="5" filter="url(#glow)"/>
+  <path d="M0 161 151 0" fill="none" stroke="#49ff00" stroke-width="2"/>
+  <path d="M1177 191 1372 0h9l-189 194z" fill="url(#beam)" opacity=".58"/>
+  <path d="M1211 178 1395 0h7l-180 181z" fill="#00f516" opacity=".98"/>
+  <path d="M1256 177 1438 0h8l-179 181z" fill="#00f516" opacity=".98"/>
+  <path d="M0 842 180 1012h-16L0 858z" fill="url(#beam)" opacity=".84"/>
+  <path d="M0 880 135 1012h-8L0 890z" fill="#00f31b" opacity=".9"/>
+  <path d="M0 933 79 1012h-8L0 941z" fill="#00e917" opacity=".55"/>
+  <path d="M1080 1012 1393 753q10-8 29-8h117v9h-116q-14 0-23 7l-298 251z" fill="url(#bandB)"/>
+  <path d="M1091 1012 1393 758q11-9 29-9h117v7h-116q-15 0-25 8l-294 248z" fill="url(#bandA)" opacity=".78"/>
+  <path d="M1090 1012 1395 761q11-9 28-9h116" fill="none" stroke="#19ff05" stroke-width="5" filter="url(#glow)"/>
+  <path d="M1200 1012 1539 741v12l-324 259z" fill="url(#bandB)"/>
+  <path d="M1219 1012 1539 765v16l-298 231z" fill="#00d915" opacity=".84"/>
+  <path d="M1290 1012 1539 795" fill="none" stroke="#00ff16" stroke-width="4" filter="url(#glow)"/>
+  <path d="M0 1012V947l67 65z" fill="#00390f" opacity=".7"/>
+  <path d="M1539 1012h-248l248-206z" fill="#00320d" opacity=".34"/>
+</svg>
