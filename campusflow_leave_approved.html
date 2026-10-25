@@ -645,6 +645,7 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
 <script src="qrcode-generator.js"></script>
+<script src="fflate.js"></script>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
@@ -704,18 +705,14 @@ function verificationPayload(app){
 }
 async function verificationUrl(app){
   if(location.protocol!=='https:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
-  const payload=verificationPayload(app);
-  let route;
-  if(typeof CompressionStream==='function'){
-    const base64=payload.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-payload.length%4)%4);
-    const raw=Uint8Array.from(atob(base64),char=>char.charCodeAt(0));
-    const compressed=await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer();
-    let binary='';for(const byte of new Uint8Array(compressed))binary+=String.fromCharCode(byte);
-    route='verify3/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-  }else route='verify2/'+payload;
+  if(typeof fflate?.zlibSync!=='function')throw new Error('The local QR compatibility encoder did not load. Refresh the portal and try again.');
+  const application=verificationApplication(app);
+  if(typeof validVerificationApplication==='function'&&!validVerificationApplication(application))throw new Error('A complete approved application is required to create a verification QR code.');
+  const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify({version:1,application})));
+  let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+  const route='verify4/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const url=new URL(location.href);url.hash=route;return url.href
-}
-function decodeVerificationPayload(encoded){
+}function decodeVerificationPayload(encoded){
   try{
     if(!/^[A-Za-z0-9_-]+$/.test(encoded))return null;
     const base64=encoded.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-encoded.length%4)%4);
@@ -726,7 +723,16 @@ function decodeVerificationPayload(encoded){
     return app;
   }catch(error){return null}
 }
-async function createApplicationQr(app){
+function decodePortableVerificationPayload(encoded){
+  try{
+    if(typeof fflate?.unzlibSync!=='function'||!/^[A-Za-z0-9_-]+$/.test(encoded))return null;
+    const base64=encoded.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-encoded.length%4)%4);
+    const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+    const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes))),app=payload?.application;
+    if(payload?.version!==1||!app||typeof app.id!=='string'||app.status!=='Approved'||typeof app.letter!=='string'||!app.student||typeof app.submittedAt!=='string'||!Number.isFinite(Date.parse(app.submittedAt)))return null;
+    return app;
+  }catch(error){return null}
+}async function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
   const qr=qrcode(0,'M');qr.addData(await verificationUrl(app));qr.make();return qr.createDataURL(6,4);
 }
@@ -743,7 +749,12 @@ function showVerification(app){
   window.scrollTo(0,0);
 }
 async function openVerificationFromHash(){
-  if(location.hash.startsWith('#verify3/')){
+  if(location.hash.startsWith('#verify4/')){
+    const app=decodePortableVerificationPayload(location.hash.slice('#verify4/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This QR link is invalid or incomplete. Scan a fresh QR from the updated HTTPS portal.</section>'}
+    return true;
+  }  if(location.hash.startsWith('#verify3/')){
     const encoded=location.hash.slice('#verify3/'.length);
     try{
       if(typeof DecompressionStream!=='function')throw new Error('Compressed QR links are not supported in this browser.');
