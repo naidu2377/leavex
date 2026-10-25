@@ -551,9 +551,17 @@ function verificationPayload(app){
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
   return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
-function verificationUrl(app){
+async function verificationUrl(app){
   if(location.protocol!=='https:'&&location.protocol!=='http:')throw new Error('Open the deployed HTTPS portal to create a QR code for another phone.');
-  const url=new URL(location.href);url.hash='verify2/'+verificationPayload(app);return url.href
+  const url=new URL(location.href);
+  if(typeof CompressionStream==='function'){
+    const payload={version:1,application:{id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||''},type:app.type||'Leave Application',start:app.start||'',end:app.end||'',letter:app.letter,submittedAt:app.submittedAt,status:app.status,reviewerName:app.reviewerName||''}};
+    const bytes=new TextEncoder().encode(JSON.stringify(payload));
+    const compressed=await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer();
+    let binary='';for(const byte of new Uint8Array(compressed))binary+=String.fromCharCode(byte);
+    url.hash='verify3/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }else url.hash='verify2/'+verificationPayload(app);
+  return url.href
 }
 function decodeVerificationPayload(encoded){
   try{
@@ -566,13 +574,24 @@ function decodeVerificationPayload(encoded){
     return app;
   }catch(error){return null}
 }
-function createApplicationQr(app){
-  if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
-  const qr=qrcode(0,'M');qr.addData(verificationUrl(app));qr.make();return qr.createDataURL(6,4);
+async function decodeCompressedVerificationPayload(encoded){
+  try{
+    if(typeof DecompressionStream!=='function'||!/^[A-Za-z0-9_-]+$/.test(encoded))return null;
+    const base64=encoded.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-encoded.length%4)%4);
+    const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+    const decompressed=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer();
+    const payload=JSON.parse(new TextDecoder().decode(decompressed)),app=payload?.application;
+    if(payload?.version!==1||!app||typeof app.id!=='string'||app.status!=='Approved'||typeof app.letter!=='string'||!app.student||typeof app.submittedAt!=='string'||!Number.isFinite(Date.parse(app.submittedAt)))return null;
+    return app;
+  }catch(error){return null}
 }
-function renderQrImage(app,targetId){
+async function createApplicationQr(app){
+  if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
+  const qr=qrcode(0,'M');qr.addData(await verificationUrl(app));qr.make();return qr.createDataURL(6,4);
+}
+async function renderQrImage(app,targetId){
   const target=$(targetId);if(!target)return;
-  try{target.src=createApplicationQr(app);target.classList.remove('hidden');}
+  try{target.src=await createApplicationQr(app);target.classList.remove('hidden');}
   catch(error){target.classList.add('hidden');showToast(error.message||'Could not generate the application QR code.');}
 }
 function showVerification(app){
@@ -582,7 +601,13 @@ function showVerification(app){
   $('view').innerHTML=`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED · LOCAL PREVIEW</span></section><section class="panel" style="padding:0;gap:0"><div class="verify-student"><div class="avatar">${escapeHtml(initial)}</div><div><strong>${escapeHtml(student.name||'Student')}</strong><small>${escapeHtml(student.roll||'Roll number not provided')} · ${escapeHtml(student.department||'Department not provided')}</small><small>${escapeHtml([student.year?`Year ${student.year}`:'',student.section?`Section ${student.section}`:''].filter(Boolean).join(' · '))}</small></div></div><div class="verify-meta"><span><small>Submission date</small><strong>${escapeHtml(formatDate(app.submittedAt))}</strong></span><span><small>Time</small><strong>${escapeHtml(new Intl.DateTimeFormat(undefined,{timeStyle:'short'}).format(new Date(app.submittedAt)))}</strong></span></div><div class="verify-meta"><span><small>Leave type</small><strong>${escapeHtml(app.type||'Leave Application')}</strong></span><span><small>Requested dates</small><strong>${app.start&&app.end?`${escapeHtml(formatDate(app.start))} – ${escapeHtml(formatDate(app.end))}`:'See dates in submitted letter'}</strong></span></div><div class="verify-letter-label">Leave application · ${escapeHtml(app.id)}</div><div class="verify-letter">${escapeHtml(app.letter)}</div>${contacts?`<div class="verify-contacts">${contacts}</div>`:''}<p class="verification-note" style="padding:0 16px 16px">This locally saved preview is not an official college approval or verification.</p></section>`;
   window.scrollTo(0,0);
 }
-function openVerificationFromHash(){
+async function openVerificationFromHash(){
+  if(location.hash.startsWith('#verify3/')){
+    const app=await decodeCompressedVerificationPayload(location.hash.slice('#verify3/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This QR code is invalid or incomplete. Scan a fresh QR code from the deployed portal.</section>'}
+    return true;
+  }
   if(location.hash.startsWith('#verify2/')){
     const app=decodeVerificationPayload(location.hash.slice('#verify2/'.length));
     if(app)showVerification(app);
