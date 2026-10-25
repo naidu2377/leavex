@@ -552,6 +552,37 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .status-card.approved .status-heading svg{stroke:#81939d}
 @media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,120px)}.status-card.status-qr-card .status-qr-panel{max-width:120px}.status-card.status-qr-card .status-qr-frame{padding:0}}
 </style>
+<style>
+/* Match the original Today’s Status card proportions on mobile. */
+@media(max-width:720px){
+.status-card.status-qr-card{width:calc(100% + 8px);margin-inline:-4px;grid-template-columns:minmax(0,1fr) minmax(0,clamp(112px,30.8vw,120px));align-items:center;gap:12px;padding:24px 19px;border-radius:24px}
+.status-card.status-qr-card .status-copy{min-width:0}
+.status-card.status-qr-card .status-heading{gap:8px;white-space:nowrap}
+.status-card.status-qr-card .status-title{margin:22px 0 8px;font-size:24px;line-height:.98;letter-spacing:-1px}
+.status-card.status-qr-card .status-badges{gap:4px}
+.status-card.status-qr-card .status-badge{padding:4px 6px;font-size:7.5px;letter-spacing:.8px}
+.status-card.status-qr-card .status-active-badge{padding:4px 7px;font-size:7.5px;letter-spacing:.8px}
+.status-card.status-qr-card .status-meta{grid-template-columns:minmax(0,1fr);gap:8px;margin-top:20px}
+.status-card.status-qr-card .status-qr-panel{max-width:clamp(112px,30.8vw,120px);gap:7px}
+}
+@media(max-width:380px){
+.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,112px);gap:8px;padding:23px 11px;border-radius:22px}
+.status-card.status-qr-card .status-heading{gap:6px;font-size:10px;letter-spacing:1px}
+.status-card.status-qr-card .status-title{margin:19px 0 6px;font-size:22px;letter-spacing:-1px}
+.status-card.status-qr-card .status-badges{gap:2px}
+.status-card.status-qr-card .status-badge{padding:3px 4px;font-size:7px;letter-spacing:.6px}
+.status-card.status-qr-card .status-active-badge{padding:3px 5px;font-size:7px;letter-spacing:.6px}
+.status-card.status-qr-card .status-meta{gap:6px;margin-top:15px}
+.status-card.status-qr-card .status-qr-panel{max-width:112px}
+}
+@media(max-width:340px){
+.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,100px);gap:6px;padding:23px 8px}
+.status-card.status-qr-card .status-badges{gap:2px}
+.status-card.status-qr-card .status-badge{padding:3px 3px;font-size:6.5px;letter-spacing:.4px}
+.status-card.status-qr-card .status-active-badge{padding:3px 4px;font-size:6.5px;letter-spacing:.4px}
+.status-card.status-qr-card .status-qr-panel{max-width:100px}
+}
+</style>
 </head>
 <body>
 <main id="auth" class="auth-shell">
