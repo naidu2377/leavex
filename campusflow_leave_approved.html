@@ -288,6 +288,19 @@ a{color:inherit;text-decoration:none}
 .status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,256px)}
 .status-card.status-qr-card .status-qr-panel{max-width:256px;gap:12px}
 .status-card.status-qr-card .status-qr-frame{padding:8px;border-radius:20px}
+/* Match the original portal's larger, category-tinted overview tiles. */
+.stats{gap:12px}
+.stat{min-height:112px;padding:15px 17px;border:1px solid var(--stat-border,rgba(255,255,255,.08));border-radius:20px;background:var(--stat-bg,linear-gradient(145deg,#171821,#111218));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+.stat-icon{width:30px;height:30px;border-radius:10px}
+.stat-icon svg{width:17px;height:17px}
+.stat-label{font-size:10px;letter-spacing:1.6px}
+.stat-value{font-size:30px;letter-spacing:-.8px}
+.stat-total{--stat-bg:linear-gradient(145deg,#191827,#12121b);--stat-border:rgba(119,114,255,.15)}
+.stat-pending{--stat-bg:linear-gradient(145deg,#1b1918,#141315);--stat-border:rgba(245,158,11,.14)}
+.stat-approved{--stat-bg:linear-gradient(145deg,#10201a,#11171a);--stat-border:rgba(0,200,106,.18)}
+.stat-rejected{--stat-bg:linear-gradient(145deg,#20171b,#151419);--stat-border:rgba(255,64,87,.16)}
+.stat-expired{--stat-bg:linear-gradient(145deg,#171b23,#11141a);--stat-border:rgba(113,128,154,.16)}
+@media(max-width:720px){.stats{gap:14px}.stat{min-height:112px;padding:16px 17px;border-radius:22px}.stat-approved{grid-column:1/-1}.stat-approved .stat-icon{width:30px;height:30px}.stat-approved .stat-value{font-size:30px}}
 .status-card.status-qr-card .status-qr-button{padding:8px;border-radius:14px}
 .status-card.status-qr-card .status-qr-caption{color:#B6C9BE;font-size:12px;font-weight:700;letter-spacing:.1px;line-height:1.4;text-align:center}
 @media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,112px);align-items:center;gap:12px;padding:17px 14px}.status-card.status-qr-card .status-qr-panel{justify-self:end;width:100%;max-width:112px;gap:7px}.status-card.status-qr-card .status-qr-frame{padding:6px;border-radius:14px}.status-card.status-qr-card .status-qr-button{padding:5px;border-radius:9px}.status-card.status-qr-card .status-qr-caption{font-size:7px;letter-spacing:.7px;line-height:1.3}}
