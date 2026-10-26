@@ -844,9 +844,11 @@ function verificationApplication(app){
 function validVerificationApplication(app){
   return!!app&&typeof app.id==='string'&&app.id.length>0&&app.status==='Approved'&&typeof app.letter==='string'&&app.letter.trim().length>0&&!!app.student&&typeof app.student.name==='string'&&app.student.name.trim().length>0&&typeof app.student.roll==='string'&&app.student.roll.trim().length>0&&typeof app.student.department==='string'&&app.student.department.trim().length>0&&typeof app.submittedAt==='string'&&Number.isFinite(Date.parse(app.submittedAt));
 }
-const QR_BASE45='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:';
-function encodeQrBase45(bytes){let result='';for(let i=0;i<bytes.length;){if(i+1<bytes.length){let value=bytes[i]*256+bytes[i+1];const a=value%45;value=Math.floor(value/45);const b=value%45,c=Math.floor(value/45);result+=QR_BASE45[a]+QR_BASE45[b]+QR_BASE45[c];i+=2}else{const value=bytes[i++];result+=QR_BASE45[value%45]+QR_BASE45[Math.floor(value/45)]}}return result}
-function decodeQrBase45(value){const bytes=[];let i=0;while(i<value.length){const remain=value.length-i;if(remain===1)return null;const a=QR_BASE45.indexOf(value[i++]),b=QR_BASE45.indexOf(value[i++]);if(a<0||b<0)return null;if(remain>=3){const c=QR_BASE45.indexOf(value[i++]),number=a+b*45+c*2025;if(c<0||number>65535)return null;bytes.push(number>>8,number&255)}else{const number=a+b*45;if(number>255)return null;bytes.push(number)}}return new Uint8Array(bytes)}
+// Base43 uses only URL-safe QR alphanumeric characters; '%' can be mistaken
+// for an escape in a verification link's fragment and break QR generation.
+const QR_BASE43='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$*+-./:';
+function encodeQrBase43(bytes){let result='';for(let i=0;i<bytes.length;){if(i+1<bytes.length){let value=bytes[i]*256+bytes[i+1];const a=value%43;value=Math.floor(value/43);const b=value%43,c=Math.floor(value/43);result+=QR_BASE43[a]+QR_BASE43[b]+QR_BASE43[c];i+=2}else{const value=bytes[i++];result+=QR_BASE43[value%43]+QR_BASE43[Math.floor(value/43)]}}return result}
+function decodeQrBase43(value){const bytes=[];let i=0;while(i<value.length){const remain=value.length-i;if(remain===1)return null;const a=QR_BASE43.indexOf(value[i++]),b=QR_BASE43.indexOf(value[i++]);if(a<0||b<0)return null;if(remain>=3){const c=QR_BASE43.indexOf(value[i++]),number=a+b*43+c*1849;if(c<0||number>65535)return null;bytes.push(number>>8,number&255)}else{const number=a+b*43;if(number>255)return null;bytes.push(number)}}return new Uint8Array(bytes)}
 function verificationPayload(app){
   const bytes=new TextEncoder().encode(JSON.stringify({version:1,application:verificationApplication(app)}));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
@@ -863,7 +865,7 @@ async function verificationUrl(app){
   const compact=[2,application.id,student.name,student.roll,student.department,application.submittedAt,letter,application.reason!==letter?application.reason:null,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||''];
   const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify(compact)));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
-  const route='verify6/'+encodeQrBase45(bytes);
+  const route='verify6/'+encodeQrBase43(bytes);
   const url=new URL(location.href);url.hash=route;return url.href
 }function decodeVerificationPayload(encoded){
   try{
@@ -912,7 +914,7 @@ function decodeCompactVerificationPayload(encoded){
 function decodeBase45VerificationPayload(encoded){
   try{
     if(typeof fflate?.unzlibSync!=='function')return null;
-    const bytes=decodeQrBase45(decodeURIComponent(encoded));if(!bytes)return null;
+    const bytes=decodeQrBase43(decodeURIComponent(encoded));if(!bytes)return null;
     const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes)));
     if(!Array.isArray(payload)||payload[0]!==2||payload.length!==12)return null;
     const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;
