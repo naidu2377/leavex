@@ -860,9 +860,10 @@ async function verificationUrl(app){
   const application=verificationApplication(app);
   if(typeof validVerificationApplication==='function'&&!validVerificationApplication(application))throw new Error('A complete approved application is required to create a verification QR code.');
   const student=application.student,letter=application.letter;
-  // Carry only what the cross-device verification screen displays. Without a
-  // server lookup the letter must remain in the QR, so include it only once.
-  const compact=[2,application.id,student.name,student.roll,student.department,application.submittedAt,letter,application.reason!==letter?application.reason:null,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||''];
+  // Keep the complete submitted letter and core verification details in the
+  // self-contained QR. Optional contact and review-time fields are omitted to
+  // reduce the encoded data and avoid exposing phone numbers in a shareable QR.
+  const compact=[3,application.id,student.name,student.roll,student.department,application.submittedAt,letter,application.reviewerName||''];
   const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify(compact)));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
   const route='verify6/'+encodeQrBase43(bytes);
@@ -911,14 +912,16 @@ function decodeCompactVerificationPayload(encoded){
     return validVerificationApplication(app)?app:null;
   }catch(error){return null}
 }
-function decodeBase45VerificationPayload(encoded){
+function decodeBase43VerificationPayload(encoded){
   try{
     if(typeof fflate?.unzlibSync!=='function')return null;
     const bytes=decodeQrBase43(decodeURIComponent(encoded));if(!bytes)return null;
     const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes)));
-    if(!Array.isArray(payload)||payload[0]!==2||payload.length!==12)return null;
-    const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;
-    const app={id,student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone};
+    if(!Array.isArray(payload))return null;
+    let app;
+    if(payload[0]===3&&payload.length===8){const [,id,name,roll,department,submittedAt,letter,reviewerName]=payload;app={id,student:{name,roll,department,year:'',section:'',phone:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt:'',parentPhone:''}}
+    else if(payload[0]===2&&payload.length===12){const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;app={id,student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone}}
+    else return null;
     return validVerificationApplication(app)?app:null;
   }catch(error){return null}
 }
@@ -953,7 +956,7 @@ function showVerification(app){
 }
 async function openVerificationFromHash(){
   if(location.hash.startsWith('#verify6/')){
-    const app=decodeBase45VerificationPayload(location.hash.slice('#verify6/'.length));
+    const app=decodeBase43VerificationPayload(location.hash.slice('#verify6/'.length));
     if(app)showVerification(app);
     else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This compact QR link is invalid or incomplete. Scan a fresh QR from the updated HTTPS portal.</section>'}
     return true;
