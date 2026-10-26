@@ -639,18 +639,19 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 @media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,100px)}.status-card.status-qr-card .status-qr-panel{max-width:100px}}
 @media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,88px)}.status-card.status-qr-card .status-qr-panel{max-width:88px}.qr-result{grid-template-columns:96px minmax(0,1fr)}.qr-result img{width:96px;height:96px}}</style>
 <style>
-/* Compact, crisp self-contained QR. Tap to open a larger scan view. */
-.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 72px}
-.status-card.status-qr-card .status-qr-panel{width:72px;max-width:72px;gap:5px}
-.status-card.status-qr-card .status-qr-frame{width:72px;height:72px;padding:4px;border:1px solid #26313d;border-radius:15px;background:#10151b;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.status-card.status-qr-card .status-qr-button{width:62px;height:62px;min-width:62px;padding:1px;border:0;border-radius:9px;background:#fff;box-shadow:none}
-.status-card.status-qr-card .status-qr-button img{display:block;width:60px;height:60px;max-width:none;padding:0;border-radius:0;object-fit:contain;image-rendering:auto}
-.status-card.status-qr-card .status-qr-caption{font-size:7px;letter-spacing:.3px;white-space:nowrap}
+/* Reference-sized QR with a clean white card and subtle blue-grey edge. */
+.status-card.status-qr-card{--status-qr-card-size:164px;grid-template-columns:minmax(0,1fr) var(--status-qr-card-size)}
+.status-card.status-qr-card .status-qr-panel{width:var(--status-qr-card-size);max-width:var(--status-qr-card-size);gap:7px}
+.status-card.status-qr-card .status-qr-frame{width:var(--status-qr-card-size);height:var(--status-qr-card-size);padding:4px;border:1px solid #334155;border-radius:22px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+.status-card.status-qr-card .status-qr-button{width:calc(var(--status-qr-card-size) - 10px);height:calc(var(--status-qr-card-size) - 10px);min-width:0;padding:9px;border:0;border-radius:17px;background:#fff;box-shadow:none}
+.status-card.status-qr-card .status-qr-button img{display:block;width:calc(var(--status-qr-card-size) - 30px);height:calc(var(--status-qr-card-size) - 30px);max-width:none;padding:0;border-radius:0;object-fit:contain;image-rendering:auto;shape-rendering:crispEdges}
+.status-card.status-qr-card.approved{background-color:#00190e;background-image:linear-gradient(135deg,transparent 0 72%,rgba(0,255,102,.24) 72.2%,transparent 72.6%) right top/44px 44px no-repeat,linear-gradient(315deg,transparent 0 72%,rgba(0,255,102,.18) 72.2%,transparent 72.6%) left bottom/44px 44px no-repeat,radial-gradient(ellipse at 100% 100%,rgba(0,255,102,.14),transparent 48%),linear-gradient(130deg,#00220b 0%,#08090d 62%,#001006 100%)}
+.status-card.status-qr-card .status-qr-caption{font-size:8px;letter-spacing:.8px;white-space:nowrap;color:#9eafbd}
 .status-qr-dialog img{width:260px;height:260px;padding:0;border-radius:0;object-fit:contain;background:#fff;image-rendering:auto}
 .qr-result{grid-template-columns:80px minmax(0,1fr)}
 .qr-result img{width:80px;height:80px;padding:0;border-radius:0;object-fit:contain;background:#fff;image-rendering:auto}
-@media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 72px;gap:8px;padding:17px 14px}.status-card.status-qr-card .status-qr-panel{width:72px;max-width:72px}.status-card.status-qr-card .status-qr-frame{width:72px;height:72px}.status-card.status-qr-card .status-qr-button{width:62px;height:62px}.status-card.status-qr-card .status-qr-button img{width:60px;height:60px}.status-qr-dialog img{width:230px;height:230px}}
-@media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 72px;gap:6px;padding:16px 9px}.qr-result{grid-template-columns:80px minmax(0,1fr)}.qr-result img{width:80px;height:80px}}
+@media(max-width:720px){.status-card.status-qr-card{--status-qr-card-size:clamp(140px,44vw,164px);gap:8px;padding:17px 14px}.status-card.status-qr-card .status-qr-panel,.status-card.status-qr-card .status-qr-frame{width:var(--status-qr-card-size)}.status-card.status-qr-card .status-qr-frame{height:var(--status-qr-card-size)}.status-card.status-qr-card .status-qr-button{width:calc(var(--status-qr-card-size) - 10px);height:calc(var(--status-qr-card-size) - 10px)}.status-card.status-qr-card .status-qr-button img{width:calc(var(--status-qr-card-size) - 30px);height:calc(var(--status-qr-card-size) - 30px)}.status-qr-dialog img{width:230px;height:230px}}
+@media(max-width:380px){.status-card.status-qr-card{gap:6px;padding:16px 9px}.qr-result{grid-template-columns:80px minmax(0,1fr)}.qr-result img{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -843,6 +844,9 @@ function verificationApplication(app){
 function validVerificationApplication(app){
   return!!app&&typeof app.id==='string'&&app.id.length>0&&app.status==='Approved'&&typeof app.letter==='string'&&app.letter.trim().length>0&&!!app.student&&typeof app.student.name==='string'&&app.student.name.trim().length>0&&typeof app.student.roll==='string'&&app.student.roll.trim().length>0&&typeof app.student.department==='string'&&app.student.department.trim().length>0&&typeof app.submittedAt==='string'&&Number.isFinite(Date.parse(app.submittedAt));
 }
+const QR_BASE45='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:';
+function encodeQrBase45(bytes){let result='';for(let i=0;i<bytes.length;){if(i+1<bytes.length){let value=bytes[i]*256+bytes[i+1];const a=value%45;value=Math.floor(value/45);const b=value%45,c=Math.floor(value/45);result+=QR_BASE45[a]+QR_BASE45[b]+QR_BASE45[c];i+=2}else{const value=bytes[i++];result+=QR_BASE45[value%45]+QR_BASE45[Math.floor(value/45)]}}return result}
+function decodeQrBase45(value){const bytes=[];let i=0;while(i<value.length){const remain=value.length-i;if(remain===1)return null;const a=QR_BASE45.indexOf(value[i++]),b=QR_BASE45.indexOf(value[i++]);if(a<0||b<0)return null;if(remain>=3){const c=QR_BASE45.indexOf(value[i++]),number=a+b*45+c*2025;if(c<0||number>65535)return null;bytes.push(number>>8,number&255)}else{const number=a+b*45;if(number>255)return null;bytes.push(number)}}return new Uint8Array(bytes)}
 function verificationPayload(app){
   const bytes=new TextEncoder().encode(JSON.stringify({version:1,application:verificationApplication(app)}));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
@@ -859,7 +863,7 @@ async function verificationUrl(app){
   const compact=[2,application.id,student.name,student.roll,student.department,application.submittedAt,letter,application.reason!==letter?application.reason:null,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||''];
   const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify(compact)));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
-  const route='verify5/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const route='verify6/'+encodeQrBase45(bytes);
   const url=new URL(location.href);url.hash=route;return url.href
 }function decodeVerificationPayload(encoded){
   try{
@@ -905,9 +909,22 @@ function decodeCompactVerificationPayload(encoded){
     return validVerificationApplication(app)?app:null;
   }catch(error){return null}
 }
+function decodeBase45VerificationPayload(encoded){
+  try{
+    if(typeof fflate?.unzlibSync!=='function')return null;
+    const bytes=decodeQrBase45(decodeURIComponent(encoded));if(!bytes)return null;
+    const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes)));
+    if(!Array.isArray(payload)||payload[0]!==2||payload.length!==12)return null;
+    const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;
+    const app={id,student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone};
+    return validVerificationApplication(app)?app:null;
+  }catch(error){return null}
+}
 async function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
-  const qr=qrcode(0,'L');qr.addData(await verificationUrl(app));qr.make();
+  const url=await verificationUrl(app),hashIndex=url.indexOf('#verify6/');
+  if(hashIndex<0)throw new Error('Could not create the application verification link.');
+  const qr=qrcode(0,'L');qr.addData(url.slice(0,hashIndex+9),'Byte');qr.addData(decodeURIComponent(url.slice(hashIndex+9)),'Alphanumeric');qr.make();
   const svg=qr.createSvgTag(1,4,'LEAVE X application verification QR');
   return`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
@@ -933,6 +950,12 @@ function showVerification(app){
   window.scrollTo(0,0);
 }
 async function openVerificationFromHash(){
+  if(location.hash.startsWith('#verify6/')){
+    const app=decodeBase45VerificationPayload(location.hash.slice('#verify6/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This compact QR link is invalid or incomplete. Scan a fresh QR from the updated HTTPS portal.</section>'}
+    return true;
+  }
   if(location.hash.startsWith('#verify5/')){
     const app=decodeCompactVerificationPayload(location.hash.slice('#verify5/'.length));
     if(app)showVerification(app);
