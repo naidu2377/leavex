@@ -639,17 +639,18 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 @media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,100px)}.status-card.status-qr-card .status-qr-panel{max-width:100px}}
 @media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,88px)}.status-card.status-qr-card .status-qr-panel{max-width:88px}.qr-result{grid-template-columns:96px minmax(0,1fr)}.qr-result img{width:96px;height:96px}}</style>
 <style>
-/* Small dashboard QR preview; tap it for a phone-camera-friendly scan size. */
-.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,190px)}
-.status-card.status-qr-card .status-qr-panel{max-width:190px;gap:6px}
-.status-card.status-qr-card .status-qr-frame{padding:0}
-.status-card.status-qr-card .status-qr-button{padding:4px;border-radius:9px}
-.status-card.status-qr-card .status-qr-caption{font-size:8px;letter-spacing:.6px}
-.status-qr-dialog img{width:260px;height:260px}
-.qr-result{grid-template-columns:100px minmax(0,1fr)}
-.qr-result img{width:100px;height:100px}
-@media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,clamp(134px,27.8vw,192px));gap:12px;padding:24px 19px}.status-card.status-qr-card .status-qr-panel{width:100%;max-width:clamp(134px,27.8vw,192px);gap:7px}.status-card.status-qr-card .status-qr-frame{width:100%;aspect-ratio:1;padding:0}.status-card.status-qr-card .status-qr-button{width:100%;height:100%;aspect-ratio:1;padding:0;border-radius:24px;background:#f8fafc}.status-card.status-qr-card .status-qr-button img{width:min(134px,calc(100% - 24px));height:min(134px,calc(100% - 24px));border-radius:0}.status-card.status-qr-card .status-qr-caption{font-size:7px;letter-spacing:.7px}.status-qr-dialog img{width:230px;height:230px}}
-@media(max-width:420px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) minmax(0,min(134px,34vw));gap:8px;padding:20px 12px}.status-card.status-qr-card .status-qr-panel{max-width:min(134px,34vw)}.status-card.status-qr-card .status-qr-button{border-radius:18px}.status-card.status-qr-card .status-qr-button img{width:min(110px,calc(100% - 24px));height:min(110px,calc(100% - 24px))}.status-card.status-qr-card .status-qr-caption{font-size:6px;letter-spacing:.4px}.qr-result{grid-template-columns:88px minmax(0,1fr)}.qr-result img{width:88px;height:88px}}
+/* Compact, crisp self-contained QR. Tap to open a larger scan view. */
+.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 80px}
+.status-card.status-qr-card .status-qr-panel{width:80px;max-width:80px;gap:5px}
+.status-card.status-qr-card .status-qr-frame{width:80px;height:80px;padding:0;border:0;border-radius:0;background:#fff;box-shadow:none}
+.status-card.status-qr-card .status-qr-button{width:80px;height:80px;min-width:80px;padding:0;border:0;border-radius:0;background:#fff;box-shadow:none}
+.status-card.status-qr-card .status-qr-button img{display:block;width:80px;height:80px;max-width:none;padding:0;border-radius:0;object-fit:contain;image-rendering:auto}
+.status-card.status-qr-card .status-qr-caption{font-size:7px;letter-spacing:.3px;white-space:nowrap}
+.status-qr-dialog img{width:260px;height:260px;padding:0;border-radius:0;object-fit:contain;background:#fff;image-rendering:auto}
+.qr-result{grid-template-columns:80px minmax(0,1fr)}
+.qr-result img{width:80px;height:80px;padding:0;border-radius:0;object-fit:contain;background:#fff;image-rendering:auto}
+@media(max-width:720px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 80px;gap:10px;padding:17px 14px}.status-card.status-qr-card .status-qr-panel{width:80px;max-width:80px}.status-card.status-qr-card .status-qr-frame,.status-card.status-qr-card .status-qr-button,.status-card.status-qr-card .status-qr-button img{width:80px;height:80px}.status-qr-dialog img{width:230px;height:230px}}
+@media(max-width:380px){.status-card.status-qr-card{grid-template-columns:minmax(0,1fr) 80px;gap:7px;padding:16px 9px}.qr-result{grid-template-columns:80px minmax(0,1fr)}.qr-result img{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -852,9 +853,13 @@ async function verificationUrl(app){
   if(typeof fflate?.zlibSync!=='function')throw new Error('The local QR compatibility encoder did not load. Refresh the portal and try again.');
   const application=verificationApplication(app);
   if(typeof validVerificationApplication==='function'&&!validVerificationApplication(application))throw new Error('A complete approved application is required to create a verification QR code.');
-  const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify({version:1,application})));
+  const student=application.student,letter=application.letter;
+  // Carry only what the cross-device verification screen displays. Without a
+  // server lookup the letter must remain in the QR, so include it only once.
+  const compact=[2,application.id,student.name,student.roll,student.department,application.submittedAt,letter,application.reason!==letter?application.reason:null,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||''];
+  const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify(compact)));
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
-  const route='verify4/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const route='verify5/'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const url=new URL(location.href);url.hash=route;return url.href
 }function decodeVerificationPayload(encoded){
   try{
@@ -888,9 +893,23 @@ function decodePortableVerificationPayload(encoded){
     return app;
   }catch(error){return null}
 }
+function decodeCompactVerificationPayload(encoded){
+  try{
+    if(typeof fflate?.unzlibSync!=='function'||!/^[A-Za-z0-9_-]+$/.test(encoded))return null;
+    const base64=encoded.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-encoded.length%4)%4);
+    const binary=atob(base64),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+    const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes)));
+    if(!Array.isArray(payload)||payload[0]!==2||payload.length!==12)return null;
+    const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;
+    const app={id,student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone};
+    return validVerificationApplication(app)?app:null;
+  }catch(error){return null}
+}
 async function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
-  const qr=qrcode(0,'M');qr.addData(await verificationUrl(app));qr.make();return qr.createDataURL(8,32);
+  const qr=qrcode(0,'L');qr.addData(await verificationUrl(app));qr.make();
+  const svg=qr.createSvgTag(1,4,'LEAVE X application verification QR');
+  return`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 async function renderQrImage(app,targetId){
   const target=$(targetId);if(!target)return;
@@ -914,6 +933,12 @@ function showVerification(app){
   window.scrollTo(0,0);
 }
 async function openVerificationFromHash(){
+  if(location.hash.startsWith('#verify5/')){
+    const app=decodeCompactVerificationPayload(location.hash.slice('#verify5/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This compact QR link is invalid or incomplete. Scan a fresh QR from the updated HTTPS portal.</section>'}
+    return true;
+  }
   if(location.hash.startsWith('#verify4/')){
     const app=decodePortableVerificationPayload(location.hash.slice('#verify4/'.length));
     if(app)showVerification(app);
