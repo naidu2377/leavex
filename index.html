@@ -871,9 +871,12 @@ async function verificationUrl(app){
   // This static site has no remote record lookup, so include the compressed
   // application in the QR. The URL stays on the smallest QR version that can
   // hold the actual letter and details.
-  const compact=[5,application.id,student.name,student.roll,student.department,application.submittedAt,application.letter,application.reason,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||'',student.year||'',student.section||'',application.subject||'',application.recipient||'',application.type||'Leave Application',application.start||'',application.end||''];
+  // Keep only fields rendered by the cross-device verification view. When
+  // reason and letter match, store the reason as an empty marker and reuse
+  // the letter after decoding rather than carrying duplicate text.
+  const compact=[6,student.name,student.roll,student.department,application.submittedAt,application.letter,application.reason===application.letter?'':application.reason,application.reviewerName||'',application.reviewedAt||'',student.phone||'',application.parentPhone||''];
   const bytes=fflate.zlibSync(new TextEncoder().encode(JSON.stringify(compact)));
-  const route='VERIFY8/'+encodeQrBase43(bytes);
+  const route='VERIFY9/'+encodeQrBase43(bytes);
   const url=new URL(location.href);url.hash=route;return url.href
 }function decodeVerificationPayload(encoded){
   try{
@@ -926,7 +929,8 @@ function decodeBase43VerificationPayload(encoded){
     const payload=JSON.parse(new TextDecoder().decode(fflate.unzlibSync(bytes)));
     if(!Array.isArray(payload))return null;
     let app;
-    if(payload[0]===5&&payload.length===19){const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone,year,section,subject,recipient,type,start,end]=payload;app={id,student:{name,roll,department,phone,year,section},type,subject,recipient,reason,letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone,start,end}}
+    if(payload[0]===6&&payload.length===11){const [,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;app={id:'LX-QR',student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone}}
+    else if(payload[0]===5&&payload.length===19){const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone,year,section,subject,recipient,type,start,end]=payload;app={id,student:{name,roll,department,phone,year,section},type,subject,recipient,reason,letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone,start,end}}
     else if(payload[0]===4&&payload.length===6){const [,name,roll,department,submittedAtMs,reviewerName]=payload;if(!Number.isSafeInteger(submittedAtMs))return null;app={compactPreview:true,id:'',student:{name,roll,department,year:'',section:'',phone:''},type:'Leave Application',subject:'Application for Leave',recipient:'',reason:'',start:'',end:'',letter:'',submittedAt:new Date(submittedAtMs).toISOString(),status:'Approved',reviewerName,reviewedAt:'',parentPhone:''}}
     else if(payload[0]===3&&payload.length===8){const [,id,name,roll,department,submittedAt,letter,reviewerName]=payload;app={id,student:{name,roll,department,year:'',section:'',phone:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt:'',parentPhone:''}}
     else if(payload[0]===2&&payload.length===12){const [,id,name,roll,department,submittedAt,letter,reason,reviewerName,reviewedAt,phone,parentPhone]=payload;app={id,student:{name,roll,department,phone,year:'',section:''},type:'Leave Application',subject:'Leave Application',recipient:'',reason:reason||letter,start:'',end:'',letter,submittedAt,status:'Approved',reviewerName,reviewedAt,parentPhone}}
@@ -937,13 +941,13 @@ function decodeBase43VerificationPayload(encoded){
 async function createApplicationQr(app){
   if(typeof qrcode!=='function')throw new Error('Local QR encoder is missing. Keep qrcode-generator.js beside this HTML file.');
   const url=new URL(await verificationUrl(app));
-  if(!url.hash.startsWith('#VERIFY8/'))throw new Error('Could not create the application verification link.');
+  if(!url.hash.startsWith('#VERIFY9/'))throw new Error('Could not create the application verification link.');
   const qr=qrcode(0,'L');
   qr.addData(url.origin.toUpperCase(),'Alphanumeric');
   qr.addData(url.pathname+url.search,'Byte');
   qr.addData('#','Byte');
-  qr.addData('VERIFY8/','Alphanumeric');
-  qr.addData(decodeURIComponent(url.hash.slice('#VERIFY8/'.length)),'Alphanumeric');
+  qr.addData('VERIFY9/','Alphanumeric');
+  qr.addData(decodeURIComponent(url.hash.slice('#VERIFY9/'.length)),'Alphanumeric');
   qr.make();
   const svg=qr.createSvgTag(1,4,'LEAVE X application verification QR');
   return`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
@@ -971,6 +975,12 @@ function showVerification(app){
   window.scrollTo(0,0);
 }
 async function openVerificationFromHash(){
+  if(location.hash.startsWith('#VERIFY9/')){
+    const app=decodeBase43VerificationPayload(location.hash.slice('#VERIFY9/'.length));
+    if(app)showVerification(app);
+    else{$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('portal').classList.add('verification-mode');$('view').innerHTML='<section class="panel empty-state"><b>Verification unavailable</b>This QR link is invalid or incomplete. Scan a fresh QR from the updated HTTPS portal.</section>'}
+    return true;
+  }
   if(location.hash.startsWith('#VERIFY8/')){
     const app=decodeBase43VerificationPayload(location.hash.slice('#VERIFY8/'.length));
     if(app)showVerification(app);
