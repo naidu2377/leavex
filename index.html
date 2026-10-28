@@ -288,6 +288,50 @@ a{color:inherit;text-decoration:none}
 .draft-textarea{min-height:330px;resize:vertical;font:14px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
 .draft-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--text-secondary);font-size:11px}
 .draft-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.compose-layout{width:100%;max-width:1120px;margin:0 auto}
+.compose-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:4px 2px}
+.compose-heading h2{margin:3px 0 6px;font-size:clamp(24px,3vw,32px);letter-spacing:-1.1px}
+.compose-heading p{margin:0;color:var(--text-secondary);font-size:12px}
+.compose-grid{display:grid;grid-template-columns:minmax(300px,.85fr) minmax(0,1.15fr);align-items:start;gap:16px}
+.compose-panel{max-width:none!important;width:100%;margin:0!important;padding:clamp(18px,2.4vw,26px)!important;align-content:start}
+.compose-section-head{display:flex;align-items:center;gap:11px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.compose-section-icon{width:34px;height:34px;display:grid;place-items:center;flex:none;border:1px solid rgba(119,114,255,.26);border-radius:11px;background:rgba(119,114,255,.1);color:#aaa4ff}
+.compose-section-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.compose-section-head h3{margin:0;font-size:14px}
+.compose-section-head p{margin:2px 0 0;color:var(--text-secondary);font-size:10px}
+.compose-form{display:grid;gap:16px}
+.compose-form .field{gap:7px}
+.compose-form .field>span{font-size:10px;letter-spacing:1.1px}
+.compose-form .field input,.compose-form .field textarea{min-width:0;padding:11px 13px;border-radius:10px;font-size:13px}
+.compose-form .field textarea{min-height:114px;resize:vertical;line-height:1.65}
+.compose-form input[type=date]{color-scheme:dark}
+.compose-form input[type=date]::-webkit-calendar-picker-indicator{opacity:.7;filter:invert(.7);cursor:pointer}
+.compose-form .field input:focus-visible,.compose-form .field textarea:focus-visible{outline:2px solid rgba(0,230,118,.72);outline-offset:2px}
+.compose-date-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.compose-hint{margin:0;color:var(--text-secondary);font-size:10px;line-height:1.5}
+.compose-field-error{min-height:0;color:var(--status-rejected);font-size:11px;line-height:1.4}
+.compose-field-error:empty{display:none}
+.compose-form [aria-invalid=true]{border-color:var(--status-rejected)!important;box-shadow:0 0 0 3px rgba(255,64,87,.09)!important}
+.compose-count{display:flex;justify-content:space-between;gap:10px;padding-top:1px;color:var(--text-secondary);font-size:10px}
+.compose-count.over-limit{color:var(--status-rejected);font-weight:700}
+.compose-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:5px;border-top:1px solid var(--border)}
+.compose-actions .primary,.compose-actions .secondary{min-height:42px}
+.letter-preview-panel{gap:14px}
+.preview-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.preview-topline h3{margin:0;font-size:14px}
+.preview-live{display:inline-flex;align-items:center;gap:6px;color:#8da397;font-size:9px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
+.preview-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent-green);box-shadow:0 0 10px rgba(0,230,118,.65)}
+.letter-paper{position:relative;min-height:460px;padding:clamp(22px,3vw,38px);overflow:hidden;border:1px solid #d6d1c6;border-radius:4px;background:linear-gradient(135deg,rgba(255,255,255,.66),transparent 44%),#f7f5ef;color:#252720;box-shadow:0 18px 34px -25px rgba(0,0,0,.8),inset 0 0 0 5px rgba(137,124,91,.055)}
+.letter-paper::before{content:"";position:absolute;top:0;left:0;width:54px;height:3px;background:var(--accent-green)}
+.letter-paper-date{margin:0 0 24px;color:#67695f;font-size:11px;text-align:right}
+.letter-paper-recipient{margin:0 0 16px;white-space:pre-line;font-size:12px;line-height:1.7}
+.letter-paper-subject{margin:0 0 17px;padding:10px 0;border-top:1px solid #dedbd1;border-bottom:1px solid #dedbd1;font-size:12px;font-weight:750}
+.letter-paper-body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-family:Georgia,"Times New Roman",serif;font-size:13px;line-height:1.9;letter-spacing:.03px}
+.letter-paper-signoff{margin:18px 0 0;white-space:pre-wrap;font-family:Georgia,"Times New Roman",serif;font-size:12px;line-height:1.75}
+.preview-note{margin:0;color:var(--text-secondary);font-size:10px}
+@media(max-width:850px){.compose-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.letter-paper{min-height:480px;padding:22px}.letter-paper-body{font-size:12px;line-height:1.8}}
+@media(max-width:720px){.compose-heading{align-items:flex-start;flex-direction:column;gap:4px}.compose-grid{grid-template-columns:minmax(0,1fr)}.letter-preview-panel{order:2}.compose-panel{order:1}.letter-paper{min-height:0;padding:24px 20px}.compose-actions{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom,0));z-index:2;margin:0 -4px;padding:12px 4px 4px;background:linear-gradient(180deg,rgba(23,23,34,0),rgba(23,23,34,.97) 25%)}}
+@media(max-width:420px){.compose-date-grid{grid-template-columns:1fr}.compose-actions{display:grid;grid-template-columns:.75fr 1.25fr}.compose-actions button{padding-inline:12px}.letter-paper{padding:21px 17px}}
 
 .help-list{display:grid;gap:14px}
 .help-item{display:grid;gap:8px;padding:18px 22px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent),var(--surface)}
@@ -664,7 +708,8 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 </style>
 <style id="shared-page-sizing">
 /* Keep the secondary pages on the same canvas and navigation scale as Home. */
-@media(min-width:961px){.portal.page-history:not(.hidden),.portal.page-profile:not(.hidden){grid-template-columns:250px minmax(0,1fr)}}
+.portal.page-history:not(.hidden),.portal.page-profile:not(.hidden){width:95.2381%;min-height:calc(100dvh / 1.05);margin-inline:auto;zoom:1.05}
+@media(min-width:961px){.portal.page-history:not(.hidden),.portal.page-profile:not(.hidden){grid-template-columns:174px minmax(0,1fr)}}
 @media(min-width:721px) and (max-width:960px){.portal.page-history:not(.hidden),.portal.page-profile:not(.hidden){grid-template-columns:76px minmax(0,1fr)}}
 .portal.page-history .sidebar,.portal.page-profile .sidebar{width:auto;padding:22px 14px 16px;gap:28px}
 .portal.page-history .sidebar-brand,.portal.page-profile .sidebar-brand{padding:0 8px 17px}
@@ -676,16 +721,16 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .portal.page-history .side-nav button,.portal.page-profile .side-nav button{gap:12px;padding:11px;border-radius:11px;font-size:13px}
 .portal.page-history .side-nav .nav-icon,.portal.page-profile .side-nav .nav-icon{width:18px;height:18px}
 .portal.page-history .side-nav button[data-page="help"],.portal.page-profile .side-nav button[data-page="help"]{display:flex}
-.portal.page-history>.topbar,.portal.page-profile>.topbar{padding:12px 28px;min-height:0}
+.portal.page-history>.topbar,.portal.page-profile>.topbar{padding:12px 28px}
 .portal.page-history>.topbar .topbar-text .eyebrow,.portal.page-profile>.topbar .topbar-text .eyebrow{font-size:10px;font-weight:inherit;letter-spacing:inherit}
 .portal.page-history>.topbar .topbar-branch,.portal.page-profile>.topbar .topbar-branch{display:none}
 .portal.page-history>.topbar .topbar-text h1,.portal.page-profile>.topbar .topbar-text h1{display:block}
 .portal.page-history>.topbar .topbar-group,.portal.page-profile>.topbar .topbar-group{position:static;padding-left:0;min-height:0}
 .portal.page-history>.topbar .topbar-group::before,.portal.page-profile>.topbar .topbar-group::before,.portal.page-history>.topbar .topbar-group::after,.portal.page-profile>.topbar .topbar-group::after{display:none}
-.portal.page-history>.topbar .user-chip,.portal.page-profile>.topbar .user-chip{gap:10px;padding:6px 11px;border:1px solid var(--border);border-radius:12px;background:#111118;font-size:12px}
+.portal.page-history>.topbar .user-chip,.portal.page-profile>.topbar .user-chip{gap:12px;padding:8px 16px 8px 10px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.01),transparent),var(--surface);font-size:12px}
 .portal.page-history>.topbar .user-chip .avatar,.portal.page-profile>.topbar .user-chip .avatar{display:grid}
-.portal.page-history>.topbar .user-chip strong,.portal.page-profile>.topbar .user-chip strong{font-size:12px;text-transform:none}
-.portal.page-history>.topbar .user-chip small,.portal.page-profile>.topbar .user-chip small{font-size:10px;text-align:left}
+.portal.page-history>.topbar .user-chip strong,.portal.page-profile>.topbar .user-chip strong{font-size:12px}
+.portal.page-history>.topbar .user-chip small,.portal.page-profile>.topbar .user-chip small{font-size:12px;text-align:left}
 .portal.page-history>.main,.portal.page-profile>.main{width:100%;max-width:840px;justify-self:center;padding:22px clamp(22px,3vw,42px) 48px}
 .archive-page,.identity-page,.help-page{width:100%;max-width:none;margin:0 auto;zoom:1}
 .identity-card{width:100%}
@@ -696,12 +741,27 @@ body,.portal,.portal:not(.hidden){background:#0a0a0f}
 .identity-record{min-height:38px;padding:6px 9px;gap:9px}
 .identity-record small{font-size:9px;letter-spacing:.6px}
 .identity-record strong{font-size:11px}
-@media(min-width:961px){.portal.page-history>.main,.portal.page-profile>.main{padding:24px 76px 48px}}
+@media(min-width:961px){
+ .portal.page-history>.main,.portal.page-profile>.main{padding:24px 76px 48px}
+ .portal.page-history>.topbar,.portal.page-profile>.topbar{min-height:47px;padding:0 28px}
+ .portal.page-history>.topbar .user-chip,.portal.page-profile>.topbar .user-chip{gap:7px;padding:3px 9px 3px 5px}
+ .portal.page-history>.topbar .user-chip .avatar,.portal.page-profile>.topbar .user-chip .avatar{width:30px;height:30px}
+ .portal.page-history>.topbar .user-chip strong,.portal.page-profile>.topbar .user-chip strong{line-height:1.1}
+ .portal.page-history>.topbar .user-chip small,.portal.page-profile>.topbar .user-chip small{font-size:10px;line-height:1.1}
+}
+@media(min-width:721px) and (max-width:960px){
+ .portal.page-history .sidebar,.portal.page-profile .sidebar{padding:18px 10px}
+ .portal.page-history .sidebar-brand,.portal.page-profile .sidebar-brand{padding:0 8px 17px}
+ .portal.page-history .sidebar-brand .brand-logo,.portal.page-profile .sidebar-brand .brand-logo{width:40px;height:40px}
+ .portal.page-history .side-nav button,.portal.page-profile .side-nav button{justify-content:center;padding:12px 8px}
+ .portal.page-history .side-nav .nav-icon,.portal.page-profile .side-nav .nav-icon{width:20px;height:20px}
+}
 @media(max-width:720px){
  .portal.page-history:not(.hidden),.portal.page-profile:not(.hidden){display:block}
  .portal.page-history .sidebar,.portal.page-profile .sidebar{display:none}
  .portal.page-history>.topbar,.portal.page-profile>.topbar{padding:16px 16px 12px;min-height:0}
  .portal.page-history>.topbar .topbar-text h1,.portal.page-profile>.topbar .topbar-text h1{display:none}
+ .portal.page-history>.topbar .topbar-branch,.portal.page-profile>.topbar .topbar-branch{display:none}
  .portal.page-history>.topbar .user-chip,.portal.page-profile>.topbar .user-chip{display:none}
  .portal.page-history>.main,.portal.page-profile>.main{max-width:none;padding:18px 14px calc(200px + env(safe-area-inset-bottom,0))}
  .archive-page,.identity-page,.help-page{width:100%;max-width:none}
@@ -847,7 +907,7 @@ function createVerificationToken(){if(!globalThis.crypto?.getRandomValues)throw 
 const rollKey=roll=>'leavex:roll:'+roll.toUpperCase();
 let mode='login',profile=null,applications=[],toastTimer=null,currentPage='home',selectedApplication=null,historySearch='',historyDateFilter=localDateKey(new Date());
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const formatDate=value=>{if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(date)};
+const formatDate=value=>{if(!value)return '—';const date=/^\d{4}-\d{2}-\d{2}$/.test(value)?new Date(Number(value.slice(0,4)),Number(value.slice(5,7))-1,Number(value.slice(8,10))):new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(date)};
 const formatDateTime=value=>{if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date)};
 function showToast(message){const toast=$('toast');toast.textContent=message;toast.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hidden'),3200)}
 function normalizeRoll(roll){return String(roll||'').toUpperCase().trim()}
@@ -891,7 +951,7 @@ const routablePages=new Set(['home','history','apply','profile','help','details'
 function pageFromLocation(){const page=location.hash.slice(1);return routablePages.has(page)?page:null}
 function syncApplyButtonState(){document.querySelectorAll('.portal .apply-nav').forEach(button=>button.classList.toggle('no-applications',applications.length===0))}
 function openPortal(){$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('user-name').textContent=profile.name||'Student';$('user-roll').textContent=profile.roll||'';$('portal-branch').textContent=branchHeaderLabel(profile.department);$('avatar').textContent=(profile.name||'S').trim().charAt(0).toUpperCase();syncApplyButtonState();navigate(pageFromLocation()||'home',{historyMode:pageFromLocation()?'none':'replace'});window.scrollTo(0,0)}
-function navigate(page,{historyMode='push'}={}){if(!routablePages.has(page))return;currentPage=page;if(page!=='details')selectedApplication=null;const portal=$('portal');portal.classList.remove('page-history','page-profile');if(page==='history'||page==='profile')portal.classList.add(`page-${page}`);document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=page==='home'?branchHeaderLabel(profile?.department):({history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';const route=`#${page}`;if(historyMode!=='none'&&location.hash!==route)history[historyMode==='replace'?'replaceState':'pushState']({page},'',route);renderPage();window.scrollTo(0,0)}
+function navigate(page,{historyMode='push'}={}){if(!routablePages.has(page))return;currentPage=page;if(page!=='details')selectedApplication=null;const portal=$('portal');portal.classList.remove('page-history','page-profile');if(page==='history'||page==='profile')portal.classList.add(`page-${page}`);document.querySelectorAll('.portal [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('page-title').textContent=page==='home'||page==='history'||page==='profile'?branchHeaderLabel(profile?.department):({history:'Application History',apply:'Apply for Leave',profile:'Profile',help:'Help & Support',details:'Leave Verification'})[page]||'Home';const route=`#${page}`;if(historyMode!=='none'&&location.hash!==route)history[historyMode==='replace'?'replaceState':'pushState']({page},'',route);renderPage();window.scrollTo(0,0)}
 function verificationApplication(app){
   return{id:app.id,student:{name:app.student?.name||'',roll:app.student?.roll||'',department:app.student?.department||'',year:app.student?.year||'',section:app.student?.section||'',phone:app.student?.phone||''},type:app.type||'Leave Application',subject:app.subject||'',recipient:app.recipient||'',reason:app.reason||app.letter||'',start:app.start||'',end:app.end||'',letter:app.letter||'',submittedAt:app.submittedAt||'',status:app.status||'',reviewerName:app.reviewerName||'',reviewedAt:app.reviewedAt||'',parentPhone:app.parentPhone||''};
 }
@@ -1078,7 +1138,7 @@ async function openVerificationFromHash(){
 }
 function latestApplication(){return[...applications].sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt))[0]||null}
 function statusClass(s){return s==='Approved'?'approved':s==='Rejected'?'rejected':s==='Pending'?'pending':''}
-function isApplicationExpired(app,today=new Date()){if(app.status==='Expired')return true;if(!app.end)return false;const end=new Date(app.end);return !Number.isNaN(end.getTime())&&end<today}
+function isApplicationExpired(app,today=new Date()){if(app.status==='Expired')return true;if(!app.end)return false;const end=/^\d{4}-\d{2}-\d{2}$/.test(app.end)?new Date(Number(app.end.slice(0,4)),Number(app.end.slice(5,7))-1,Number(app.end.slice(8,10))):new Date(app.end);if(Number.isNaN(end.getTime()))return false;const todayStart=new Date(today.getFullYear(),today.getMonth(),today.getDate());return end<todayStart}
 function renderHome(){
   const today=new Date(),current=latestApplication();
   const todayKey=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
@@ -1139,30 +1199,88 @@ function renderHistory(){
   updateResults();
 }
 function renderApply(){
-  $('view').innerHTML=`<div class="apply-layout"><section class="panel"><div class="draft-header"><h2>Drafting Navigator</h2><p>Write your leave letter below, including your requested dates and reason.</p></div><form id="leave-form" novalidate><label class="field"><span>Leave Letter *</span><textarea id="letter" class="draft-textarea" required aria-describedby="letter-count" spellcheck="true"></textarea></label><div class="draft-footer"><span id="letter-count" aria-live="polite">0 / 1500 words</span><span>Include all dates and details in your letter.</span></div><div id="leave-error" class="auth-error" role="alert"></div><div class="draft-actions"><button class="secondary" type="button" id="cancel-application">Cancel</button><button class="primary" type="submit">Submit Application</button></div></form></section></div>`;
-  const updateWordCount=()=>{const count=$('letter').value.trim().split(/\s+/).filter(Boolean).length;$('letter-count').textContent=`${count} / 1500 words`;$('letter-count').classList.toggle('auth-error',count>1500)};
-  $('letter').addEventListener('input',updateWordCount);
-  updateWordCount();
+  $('view').innerHTML=`<div class="apply-layout compose-layout"><header class="compose-heading"><div><span class="eyebrow">New request</span><h2>Compose leave application</h2><p>Share the dates and reason. Your formal letter is prepared for you to review.</p></div></header><div class="compose-grid"><section class="panel compose-panel"><div class="compose-section-head"><span class="compose-section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3M8 17h7"/></svg></span><div><h3>Leave details</h3><p>Required information for your request</p></div></div><form id="leave-form" class="compose-form" novalidate><div class="compose-date-grid"><label class="field"><span>Start date <b aria-hidden="true">*</b></span><input id="leave-start" type="date" required aria-describedby="start-error"><small id="start-error" class="compose-field-error"></small></label><label class="field"><span>End date <b aria-hidden="true">*</b></span><input id="leave-end" type="date" required aria-describedby="end-error"><small id="end-error" class="compose-field-error"></small></label></div><label class="field"><span>Reason for leave <b aria-hidden="true">*</b></span><textarea id="leave-reason" required maxlength="10000" placeholder="Briefly explain why you need leave…" aria-describedby="reason-hint reason-error" spellcheck="true"></textarea><small id="reason-hint" class="compose-hint">Use a clear, respectful explanation. The complete generated letter must stay within 1,500 words.</small><small id="reason-error" class="compose-field-error"></small></label><div id="leave-count" class="compose-count" aria-live="polite"><span>Complete letter</span><span id="letter-count">0 / 1500 words</span></div><div id="leave-error" class="auth-error" role="alert" aria-live="assertive"></div><div class="compose-actions"><button class="secondary" type="button" id="cancel-application">Cancel</button><button class="primary" type="submit">Submit Application</button></div></form></section><section class="panel compose-panel letter-preview-panel" aria-labelledby="preview-title"><div class="preview-topline"><h3 id="preview-title">Letter preview</h3><span class="preview-live">Live preview</span></div><article class="letter-paper" aria-label="Preview of your leave application"><p id="preview-date" class="letter-paper-date"></p><p id="preview-recipient" class="letter-paper-recipient"></p><p id="preview-subject" class="letter-paper-subject"></p><p id="preview-body" class="letter-paper-body"></p><p id="preview-signoff" class="letter-paper-signoff"></p></article><p class="preview-note">Review your details before submitting. This draft does not indicate an approval or include a verification QR.</p></section></div></div>`;
+  const today=localDateKey(new Date()),start=$('leave-start'),end=$('leave-end'),reason=$('leave-reason'),form=$('leave-form');
+  start.min=today;end.min=today;
+  const touched=new Set();let submitted=false;
+  function dateLabel(value){if(!value)return '';const [year,month,day]=value.split('-').map(Number);return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(new Date(year,month-1,day))}
+  function letterParts(){
+    const startText=dateLabel(start.value)||'Select a start date',endText=dateLabel(end.value)||'Select an end date';
+    const department=String(profile?.department||'').trim();
+    const identity=[profile?.name||'Not provided',`Roll No.: ${profile?.roll||'Not provided'}`,`Year: ${profile?.year?`${profile.year}${profile.year==='1'?'st':profile.year==='2'?'nd':profile.year==='3'?'rd':'th'} Year`:'Not provided'}`,`Department: ${department||'Not provided'}`,`Section: ${profile?.section||'Not provided'}`];
+    const body=`I respectfully request leave from ${startText} to ${endText} due to ${reason.value.trim()||'your reason for leave'}. I will follow all applicable department rules, return to classes promptly after the requested leave period, and complete any academic work I miss.\n\nThank you for your consideration.`;
+    const recipient=`To,\nThe Head of the Department${department?`,\nDepartment of ${department}`:''}`;
+    const subject='Subject: Application for Leave';
+    const date=`Date: ${formatDate(new Date())}`;
+    const letter=[date,'',recipient,'',subject,'','Respected Sir/Madam,','',body,'','Yours obediently,',...identity,date].join('\n');
+    return{date,recipient,subject,body,signoff:['Yours obediently,',...identity,date].join('\n'),letter};
+  }
+  function validate(showAll=false){
+    const errors={start:'',end:'',reason:''},startValue=start.value,endValue=end.value,reasonValue=reason.value.trim();
+    if(!startValue)errors.start='Select a start date.';
+    else if(startValue<today)errors.start='Start date cannot be in the past.';
+    if(!endValue)errors.end='Select an end date.';
+    else if(endValue<today)errors.end='End date cannot be in the past.';
+    else if(startValue&&endValue<startValue)errors.end='End date must be on or after the start date.';
+    if(!reasonValue)errors.reason='Enter a reason for your leave.';
+    const fullLetter=letterParts().letter,wordCount=fullLetter.trim().split(/\s+/).filter(Boolean).length;
+    const visibleWordCount=wordCount;
+    $('letter-count').textContent=`${visibleWordCount} / 1500 words`;
+    $('leave-count').classList.toggle('over-limit',wordCount>1500);
+    if(wordCount>1500&&startValue&&endValue&&reasonValue)errors.reason='The complete letter exceeds 1,500 words. Shorten your reason before submitting.';
+    [['start',start,errors.start],['end',end,errors.end],['reason',reason,errors.reason]].forEach(([key,input,message])=>{
+      $(key==='start'?'start-error':key==='end'?'end-error':'reason-error').textContent=(showAll||touched.has(key))?message:'';
+      input.setAttribute('aria-invalid',String(!!((showAll||touched.has(key))&&message)));
+    });
+    $('leave-error').textContent='';
+    return{valid:!errors.start&&!errors.end&&!errors.reason,errors,letter:fullLetter,wordCount};
+  }
+  function updatePreview(){
+    const parts=letterParts();
+    $('preview-date').textContent=parts.date;
+    $('preview-recipient').textContent=parts.recipient;
+    $('preview-subject').textContent=parts.subject;
+    $('preview-body').textContent=`Respected Sir/Madam,\n\n${parts.body}`;
+    $('preview-signoff').textContent=parts.signoff;
+    validate(false);
+  }
+  start.addEventListener('input',()=>{touched.add('start');end.min=start.value&&start.value>today?start.value:today;updatePreview()});
+  start.addEventListener('change',()=>{touched.add('start');end.min=start.value&&start.value>today?start.value:today;updatePreview()});
+  end.addEventListener('input',()=>{touched.add('end');updatePreview()});
+  end.addEventListener('change',()=>{touched.add('end');updatePreview()});
+  reason.addEventListener('input',()=>{touched.add('reason');updatePreview()});
+  reason.addEventListener('blur',()=>{touched.add('reason');updatePreview()});
+  updatePreview();
   $('cancel-application').addEventListener('click',()=>navigate('home'));
-  $('leave-form').addEventListener('submit',submitApplication);
+  form.addEventListener('submit',submitApplication);
 }
 function submitApplication(e){
-  e.preventDefault();$('leave-error').textContent='';
-  const letter=$('letter').value.trim(),wordCount=letter.split(/\s+/).filter(Boolean).length;
-  if(!letter){$('leave-error').textContent='Write your leave letter before submitting.';return}
-  if(wordCount>1500){$('leave-error').textContent='Keep your letter within 1500 words.';return}
-  if(/\[(?:start date|end date|reason)\]/i.test(letter)){$('leave-error').textContent='Replace the start date, end date, and reason prompts in your letter.';return}
-  if(letter.length<80){$('leave-error').textContent='Please include your leave dates and reason in the letter.';return}
+  e.preventDefault();
+  const start=$('leave-start'),end=$('leave-end'),reason=$('leave-reason'),today=localDateKey(new Date()),startValue=start.value,endValue=end.value,reasonValue=reason.value.trim();
+  $('leave-error').textContent='';
+  const errors=[];
+  if(!startValue||startValue<today)errors.push(['leave-start',!startValue?'Select a start date.':'Start date cannot be in the past.']);
+  if(!endValue||endValue<today||startValue&&endValue<startValue)errors.push(['leave-end',!endValue?'Select an end date.':endValue<today?'End date cannot be in the past.':'End date must be on or after the start date.']);
+  if(!reasonValue)errors.push(['leave-reason','Enter a reason for your leave.']);
+  if(errors.length){errors.forEach(([id,message])=>{const input=$(id),error=$(id==='leave-start'?'start-error':id==='leave-end'?'end-error':'reason-error');input.setAttribute('aria-invalid','true');error.textContent=message});$(errors[0][0]).focus();return}
+  const startText=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(new Date(`${startValue}T00:00:00`));
+  const endText=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(new Date(`${endValue}T00:00:00`));
+  const department=String(profile?.department||'').trim(),year=profile?.year?`${profile.year}${profile.year==='1'?'st':profile.year==='2'?'nd':profile.year==='3'?'rd':'th'} Year`:'Not provided';
+  const date=`Date: ${formatDate(new Date())}`;
+  const body=`I respectfully request leave from ${startText} to ${endText} due to ${reasonValue}. I will follow all applicable department rules, return to classes promptly after the requested leave period, and complete any academic work I miss.\n\nThank you for your consideration.`;
+  const letter=[date,'','To,','The Head of the Department',department?`Department of ${department}`:'','', 'Subject: Application for Leave','','Respected Sir/Madam,','',body,'','Yours obediently,',profile.name||'Not provided',`Roll No.: ${profile.roll||'Not provided'}`,`Year: ${year}`,`Department: ${department||'Not provided'}`,`Section: ${profile.section||'Not provided'}`,date].join('\n');
+  const wordCount=letter.trim().split(/\s+/).filter(Boolean).length;
+  if(wordCount>1500){$('reason-error').textContent='The complete letter exceeds 1,500 words. Shorten your reason before submitting.';$('leave-reason').setAttribute('aria-invalid','true');$('leave-reason').focus();return}
   let verificationToken;try{verificationToken=createVerificationToken()}catch(error){$('leave-error').textContent=error.message||'Could not create a secure verification token.';return}
   const now=new Date().toISOString();
-  const app={id:'LX-'+(globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2,10)}`),verificationToken,student:{name:profile.name,roll:profile.roll,department:profile.department,year:profile.year,section:profile.section,email:profile.email,phone:profile.phone||''},type:'Leave Application',subject:'Application for Leave',recipient:'The Head of the Department',reason:letter,start:'',end:'',letter,submittedAt:now,status:'Approved',reviewerName:'Sireesha Podota',reviewedAt:now,parentPhone:profile.parentPhone||''};
+  const app={id:'LX-'+(globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2,10)}`),verificationToken,student:{name:profile.name,roll:profile.roll,department:profile.department,year:profile.year,section:profile.section,email:profile.email,phone:profile.phone||''},type:'Leave Application',subject:'Application for Leave',recipient:'The Head of the Department',reason:reasonValue,start:startValue,end:endValue,letter,submittedAt:now,status:'Approved',reviewerName:'Sireesha Podota',reviewedAt:now,parentPhone:profile.parentPhone||''};
   try{applications.push(app);localStorage.setItem(applicationsKey(profile.email),JSON.stringify(applications));localStorage.setItem(verificationKey(app.verificationToken),JSON.stringify(app));localStorage.setItem(verificationKey(app.id),JSON.stringify(app));}catch(error){applications=applications.filter(item=>item.id!==app.id);$('leave-error').textContent='Could not save this application for the QR code. Check browser storage and try again.';return}
   syncApplyButtonState();selectedApplication=app;showToast('Application submitted successfully.');navigate('details');
 }
 function renderDetails(){
   if(!selectedApplication){navigate('history');return}
   const app=selectedApplication,s=app.student||{};
-  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR opens this application and its full leave letter on another phone. Anyone with the QR can read these details. Share it with the intended recipient.</p><p><b>Reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail span-2"><small>Leave details</small><strong>Dates and reason are included in your submitted letter.</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
+  $('view').innerHTML=`<button class="text-button" id="back-history">← Back</button>${app.status==='Approved'?`<section class="verify-banner"><span class="verify-shield" aria-hidden="true">✓</span><strong>ACCESS GRANTED</strong><span>Status: APPROVED</span></section><section class="qr-result"><img id="detail-qr" alt="QR code for this application"><div><strong>Scan to open this application</strong><p>The QR opens this application and its full leave letter on another phone. Anyone with the QR can read these details. Share it with the intended recipient.</p><p><b>Reviewer:</b> ${escapeHtml(app.reviewerName||'Not available')}</p></div></section>`:''}<section class="panel"><div class="section-head"><h2>${escapeHtml(app.subject||app.type)}</h2><span class="status-label ${app.status==='Approved'?'status-approved':app.status==='Rejected'?'status-rejected':'status-pending'}">${escapeHtml(app.status)}</span></div><div class="details-grid"><div class="detail"><small>Application ID</small><strong>${escapeHtml(app.id)}</strong></div><div class="detail"><small>Student</small><strong>${escapeHtml(s.name)} • ${escapeHtml(s.roll)}</strong></div><div class="detail"><small>Submitted</small><strong>${escapeHtml(formatDateTime(app.submittedAt))}</strong></div><div class="detail"><small>Reviewer</small><strong>${escapeHtml(app.reviewerName||'Not available')}</strong></div><div class="detail"><small>Start date</small><strong>${escapeHtml(formatDate(app.start))}</strong></div><div class="detail"><small>End date</small><strong>${escapeHtml(formatDate(app.end))}</strong></div><div class="detail span-2"><small>Reason</small><strong>${escapeHtml(app.reason||'—')}</strong></div></div><div class="section-head"><h3>Submitted letter</h3></div><div class="letter">${escapeHtml(app.letter)}</div></section>`;
   if(app.status==='Approved')renderQrImage(app,'detail-qr');
   $('back-history').addEventListener('click',()=>navigate('history'));
 }
