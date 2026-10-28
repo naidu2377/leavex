@@ -1,9 +1,10 @@
-import { Application } from './demo';
+import { Application } from './data';
 import { supabase, UserProfile } from './supabase';
 
 type ApplicationRow = {
   id: string;
   reference: string;
+  user_id: string;
   student_name: string;
   roll: string;
   department: string;
@@ -42,6 +43,7 @@ function toApplication(row: ApplicationRow): Application {
   return {
     id: row.id,
     reference: row.reference,
+    userId: row.user_id,
     name: row.student_name,
     roll: row.roll,
     branch: row.department,
@@ -62,7 +64,16 @@ function toApplication(row: ApplicationRow): Application {
 }
 
 const applicationColumns =
-  'id,reference,student_name,roll,department,year,section,type,from_date,to_date,departure_time,return_time,reason,status,created_at,mentor_comment,hod_comment,token';
+  'id,reference,user_id,student_name,roll,department,year,section,type,from_date,to_date,departure_time,return_time,reason,status,created_at,mentor_comment,hod_comment,token';
+
+export async function hasReviewerAssignments(): Promise<boolean> {
+  const { data, error } = await requireSupabase()
+    .from('reviewer_assignments')
+    .select('id')
+    .limit(1);
+  if (error) throw error;
+  return data.length > 0;
+}
 
 export async function loadApplications(): Promise<Application[]> {
   const { data, error } = await requireSupabase()

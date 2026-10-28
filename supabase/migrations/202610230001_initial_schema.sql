@@ -58,6 +58,20 @@ grant select, insert, update on public.leave_applications to authenticated;
 create index if not exists leave_applications_user_id_idx on public.leave_applications (user_id);
 create index if not exists leave_applications_department_section_idx on public.leave_applications (department, section);
 
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'leave_applications'
+  ) then
+    alter publication supabase_realtime add table public.leave_applications;
+  end if;
+end;
+$$;
+
 alter table public.profiles enable row level security;
 alter table public.reviewer_assignments enable row level security;
 alter table public.leave_applications enable row level security;
@@ -203,6 +217,26 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.create_student_profile();
+
+insert into public.profiles (id, role, full_name, roll_number, email, department, year, section)
+select
+  auth_user.id,
+  'student',
+  coalesce(auth_user.raw_user_meta_data ->> 'full_name', ''),
+  upper(nullif(auth_user.raw_user_meta_data ->> 'roll_number', '')),
+  auth_user.email,
+  nullif(auth_user.raw_user_meta_data ->> 'department', ''),
+  nullif(auth_user.raw_user_meta_data ->> 'year', ''),
+  nullif(auth_user.raw_user_meta_data ->> 'section', '')
+from auth.users auth_user
+where auth_user.email is not null
+on conflict (id) do update set
+  full_name = excluded.full_name,
+  roll_number = excluded.roll_number,
+  email = excluded.email,
+  department = excluded.department,
+  year = excluded.year,
+  section = excluded.section;
 
 create or replace function public.verify_leave_application(application_token uuid)
 returns table (

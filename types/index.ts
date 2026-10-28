@@ -28,7 +28,6 @@ export interface Student {
   section: string;
   password: string;
   avatar?: string;
-  isDemo: boolean;
 }
 
 export interface Review {
@@ -58,7 +57,6 @@ export interface Application {
   hodReview: Review | null;
   verificationToken: string | null;
   verificationUrl: string | null;
-  isDemo: boolean;
 }
 
 export interface Notification {
@@ -81,7 +79,6 @@ export interface Mentor {
   department: string;
   password: string;
   assignedSections: string[];
-  isDemo: boolean;
 }
 
 export interface HOD {
@@ -91,11 +88,9 @@ export interface HOD {
   email: string;
   department: string;
   password: string;
-  isDemo: boolean;
 }
 
 export interface AuthSession {
   role: UserRole;
   userId: string;
-  isDemo: boolean;
 }
